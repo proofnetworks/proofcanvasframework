@@ -1,3 +1,19 @@
+// ProofCanvas Framework Version
+const PROOFCANVAS_VERSION = '3.0.0';
+
+// ASCII Logo and Version Display
+console.log(`
+██████╗ ██████╗  ██████╗  ██████╗ ███████╗ ██████╗ █████╗ ███╗   ██╗██╗   ██╗ █████╗ ███████╗
+██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗██╔════╝██╔════╝██╔══██╗████╗  ██║██║   ██║██╔══██╗██╔════╝
+██████╔╝██████╔╝██║   ██║██║   ██║█████╗  ██║     ███████║██╔██╗ ██║██║   ██║███████║███████╗
+██╔═══╝ ██╔══██╗██║   ██║██║   ██║██╔══╝  ██║     ██╔══██║██║╚██╗██║╚██╗ ██╔╝██╔══██║╚════██║
+██║     ██║  ██║╚██████╔╝╚██████╔╝██║     ╚██████╗██║  ██║██║ ╚████║ ╚████╔╝ ██║  ██║███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
+
+Version: ${PROOFCANVAS_VERSION}
+Advanced HTML5 Game Framework - LLM Optimized
+`);
+
 /**
  * ProofCanvas - Advanced HTML5 Game Framework
  * A comprehensive, LLM-optimized game framework built on HTML5 Canvas
@@ -18,7 +34,11 @@
  * │ ├── EffectsManager (Screen shake, flash, zoom effects)         │
  * │ ├── TweenManager (Animation system with easing)                │
  * │ ├── UIManager (Canvas-based UI - use HTML/jQuery instead)      │
- * │ └── CollisionManager (AABB/Circle collision detection)         │
+ * │ ├── CollisionManager (AABB/Circle collision detection)         │
+ * │ ├── StorageManager (localStorage with game-specific prefixing) │
+ * │ ├── NetworkManager (REST API & WebSocket ProofNetwork client)  │
+ * │ ├── WalletManager (Solana wallet integration & transactions)   │
+ * │ └── SceneManager (Hierarchical scene graph with GameObjects)   │
  * └─────────────────────────────────────────────────────────────────┘
  * 
  * 🎨 RENDERING PIPELINE:
@@ -88,6 +108,19 @@
  * │ await game.assetManager.lazyLoad('boss')  // Auto-load asset   │
  * │ game.preloadAssets(['level3_assets'], 'medium')  // Background │
  * │ game.unloadContentPack('level1')  // Free memory              │
+ * └─────────────────────────────────────────────────────────────────┘
+ * 
+ * 🪙 WALLET INTEGRATION WORKFLOW:
+ * ┌─────────────────────────────────────────────────────────────────┐
+ * │ 1. Connect Wallet → 2. Authenticate → 3. Sign Transactions     │
+ * │ 4. Handle Events → 5. Manage State → 6. Local Fallback         │
+ * │                                                                 │
+ * │ Example Usage:                                                  │
+ * │ const connected = await game.wallet.connect()  // Auto-detect   │
+ * │ const signature = await game.wallet.signMessage('Hello!')      │
+ * │ const result = await game.wallet.signAndSendTransaction(tx)     │
+ * │ game.wallet.on('accountChanged', (newAccount) => {...})         │
+ * │ await game.wallet.createLocalWallet('password')  // Fallback    │
  * └─────────────────────────────────────────────────────────────────┘
  * 
  * 🎯 LLM OPTIMIZATION PHILOSOPHY:
@@ -223,6 +256,57 @@
  * // Get loading statistics
  * const stats = game.getContentPackStats();
  * console.log(`Loaded: ${stats.memoryUsage.loadedAssets} assets, ${stats.memoryUsage.loadedSounds} sounds`);
+ * 
+ * // ==================== STORAGE SYSTEM ====================
+ * // Save game data with automatic prefixing
+ * game.storage.set('playerLevel', 15);
+ * game.storage.set('playerData', { 
+ *   health: 100, inventory: ['sword', 'potion'], position: {x: 100, y: 200} 
+ * });
+ * 
+ * // Load saved data with defaults
+ * const level = game.storage.get('playerLevel', 1);
+ * const playerData = game.storage.get('playerData', { health: 100, inventory: [] });
+ * 
+ * // Check if save exists
+ * if (game.storage.has('checkpoint')) {
+ *   const checkpoint = game.storage.get('checkpoint');
+ * }
+ * 
+ * // Batch operations
+ * game.storage.setMultiple({
+ *   settings: { volume: 0.7, difficulty: 'normal' },
+ *   achievements: ['first_boss', 'speedrun']
+ * });
+ * 
+ * // Export/Import save data
+ * const saveString = game.storage.exportData();
+ * game.storage.importData(saveString, false); // false = replace, true = merge
+ * 
+ * // Clear game data (only this game's data)
+ * game.storage.clear();
+ * 
+ * // ==================== NETWORK INTEGRATION ====================
+ * // Call ProofNetwork contracts
+ * const result = await game.network.callContract('coinflip', 'flip', { bet: 100 });
+ * 
+ * // Get contract state
+ * const state = await game.network.getContractState('coinflip');
+ * 
+ * // Subscribe to blockchain events
+ * game.network.subscribe('contract:coinflip:gameComplete', (data) => {
+ *   console.log('Game completed:', data);
+ *   game.effectsManager.addScreenFlash('#gold', 0.5);
+ * });
+ * 
+ * // Get VRF random numbers
+ * const randomValues = await game.network.getVRF({ min: 1, max: 100, count: 5 });
+ * 
+ * // Enable caching for better performance
+ * game.network.enableCache(30000); // 30 second cache
+ * 
+ * // Connect WebSocket for real-time updates
+ * await game.network.connect();
  * ```
  * 
  * 🔧 AUTOMATIC LIBRARY LOADING:
@@ -243,7 +327,7 @@
  * ```
  * 
  * @author AI-Generated Game Framework
- * @version 3.0.0
+ * @version ${PROOFCANVAS_VERSION}
  * @requires jQuery (automatically loaded)
  * @requires Howler.js (automatically loaded)
  */
@@ -263,6 +347,33 @@ if (typeof Howl === 'undefined') {
     howlerScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js';
     howlerScript.crossOrigin = 'anonymous';
     document.head.appendChild(howlerScript);
+}
+
+// Three.js support has been removed from ProofCanvas
+
+// Auto-load Solana Web3.js and dependencies for wallet integration
+if (typeof window.solanaWeb3 === 'undefined') {
+    const solanaScripts = [
+        'https://shdw-drive.genesysgo.net/2gJbqqJjTPkEVTQpRrZEjX1Cpx1FkGKysxK9oky1XyMt/solanaWeb3.js',
+        'https://shdw-drive.genesysgo.net/2gJbqqJjTPkEVTQpRrZEjX1Cpx1FkGKysxK9oky1XyMt/bn.js',
+        'https://shdw-drive.genesysgo.net/2gJbqqJjTPkEVTQpRrZEjX1Cpx1FkGKysxK9oky1XyMt/bs58.js',
+        'https://shdw-drive.genesysgo.net/2gJbqqJjTPkEVTQpRrZEjX1Cpx1FkGKysxK9oky1XyMt/bufferbundle.js',
+        'https://shdw-drive.genesysgo.net/2gJbqqJjTPkEVTQpRrZEjX1Cpx1FkGKysxK9oky1XyMt/umibundle.js'
+    ];
+    
+    solanaScripts.forEach(src => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+    });
+    
+    // Buffer patch for browser compatibility
+    setTimeout(() => {
+        if (window.buffer && window.buffer.Buffer) {
+            window.Buffer = window.Buffer || window.buffer.Buffer;
+        }
+    }, 1000);
 }
 
 /**
@@ -334,6 +445,7 @@ class GameFramework {
      * @param {boolean} [config.autoScale=true] - Enable automatic scaling
      * @param {string} [config.scaleMode='fit'] - Scale mode: 'fit', 'fill', 'stretch', 'none'
      * @param {boolean} [config.autoCenter=true] - Automatically center canvas in container
+     * @param {string} [config.gameName] - Game name for localStorage prefix (defaults to 'proofcanvas_game')
      * 
      * @example
      * // Simple initialization (LLM-friendly)
@@ -344,7 +456,8 @@ class GameFramework {
      *   width: 1024,
      *   height: 768,
      *   pixelPerfect: true,
-     *   container: $('#gameArea')[0]
+     *   container: $('#gameArea')[0],
+     *   gameName: 'MyAwesomeGame' // For localStorage prefix: 'myawesomegame_'
      * });
      * 
      * // Immediately create HTML UI with jQuery
@@ -358,6 +471,9 @@ class GameFramework {
      * });
      */
     constructor(config = {}) {
+        // Framework version
+        this.version = PROOFCANVAS_VERSION;
+        
         this.config = {
             width: 800,
             height: 600,
@@ -366,6 +482,7 @@ class GameFramework {
             autoScale: true,
             scaleMode: 'fit',
             autoCenter: true,
+            renderType: '2d', // Only 2D rendering supported
             ...config
         };
 
@@ -391,29 +508,41 @@ class GameFramework {
         this.fps = 0;
         this.frameCount = 0;
         
-        this._init();
+        // Initialize asynchronously to handle Three.js loading
+        this._init().catch(error => {
+            console.error('Failed to initialize GameFramework:', error);
+        });
     }
 
     /**
      * Initialize all core systems
      * @private
      */
-    _init() {
+    async _init() {
         this._createCanvas();
+        
+        // Initialize 2D renderer
         this.renderer = new Renderer(this);
+        
         this.assetManager = new AssetManager(this);
         this.renderCache = new RenderCache(this);
         this.particleSystem = new ParticleSystem(this);
         this.tweenManager = new TweenManager(this);
         this.effectsManager = new EffectsManager(this);
         this.timeManager = new TimeManager(this);
+        this.lightingSystem = new LightingSystem(this);
         this.input = new InputManager(this);
         this.uiManager = new UIManager(this);
         this.soundManager = new SoundManager(this);
+        this.storage = new StorageManager(this);
+        this.network = new NetworkManager(this);
+        this.sceneManager = new SceneManager(this);
+        this.wallet = new WalletManager(this);
         
         // LLM-optimized jQuery integration
         this._setupJQueryHelpers();
     }
+
 
     /**
      * Setup jQuery helpers and LLM-optimized UI utilities
@@ -660,6 +789,7 @@ class GameFramework {
             this.canvas.style.imageRendering = 'crisp-edges';
         }
         
+        // Get 2D context
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = !this.config.pixelPerfect;
         
@@ -981,14 +1111,26 @@ class GameFramework {
         
         const currentTime = performance.now();
         this.deltaTime = (currentTime - this.lastTime) / 1000;
+        
+        // Frame rate limiting - cap at 60fps minimum frame time
+        const minFrameTime = 1/60; // 16.67ms
+        if (this.deltaTime < minFrameTime) {
+            setTimeout(() => this._gameLoop(), (minFrameTime - this.deltaTime) * 1000);
+            return;
+        }
+        
+        // Cap maximum delta time to prevent spiral of death
+        this.deltaTime = Math.min(this.deltaTime, 1/30); // Max 33ms
         this.lastTime = currentTime;
         
         // Apply time effects
-        this.deltaTime = this.timeManager.applyTimeScale(this.deltaTime);
+        if (this.timeManager) {
+            this.deltaTime = this.timeManager.applyTimeScale(this.deltaTime);
+        }
         
-        // Update FPS counter
+        // Update FPS counter less frequently
         this.frameCount++;
-        if (this.frameCount % 60 === 0) {
+        if (this.frameCount % 120 === 0) { // Every 2 seconds instead of 1
             this.fps = Math.round(1 / this.deltaTime);
         }
         
@@ -1008,8 +1150,13 @@ class GameFramework {
         this.tweenManager.update(this.deltaTime);
         this.particleSystem.update(this.deltaTime);
         this.effectsManager.update(this.deltaTime);
-        this.timeManager.update(this.deltaTime);
+        if (this.timeManager) {
+            this.timeManager.update(this.deltaTime);
+        }
+        this.lightingSystem.update(this.deltaTime);
         this.uiManager.update(this.deltaTime);
+        this.sceneManager.update(this.deltaTime);
+        
         
         if (this.currentState) {
             this.states.get(this.currentState).update(this.deltaTime);
@@ -1031,7 +1178,18 @@ class GameFramework {
             this.states.get(this.currentState).render(this.renderer);
         }
         
+        // Render scene hierarchy
+        this.sceneManager.render(this.renderer);
+        
         this.particleSystem.render(this.renderer);
+        
+        // Render lighting system
+        this.lightingSystem.renderLighting(this.renderer);
+        
+        // Apply lighting to main canvas (only for 2D renderer)
+        if (this.ctx) {
+            this.lightingSystem.applyLighting(this.ctx);
+        }
         
         // Render UI on top of everything else
         this.uiManager.render(this.renderer);
@@ -1097,7 +1255,7 @@ class GameState {
 class Renderer {
     constructor(game) {
         this.game = game;
-        this.ctx = game.ctx;
+        this.ctx = game.ctx; // Will be null for Three.js renderer
         this.canvas = game.canvas;
         
         // Render layers
@@ -1124,7 +1282,9 @@ class Renderer {
      * Clear the canvas
      */
     clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (this.ctx) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
         this.drawCalls = 0;
     }
 
@@ -1132,17 +1292,21 @@ class Renderer {
      * Begin frame rendering
      */
     beginFrame() {
-        this.ctx.save();
-        this._applyCamera();
-        this._applyPreEffects();
+        if (this.ctx) {
+            this.ctx.save();
+            this._applyCamera();
+            this._applyPreEffects();
+        }
     }
 
     /**
      * End frame rendering
      */
     endFrame() {
-        this._applyPostEffects();
-        this.ctx.restore();
+        if (this.ctx) {
+            this._applyPostEffects();
+            this.ctx.restore();
+        }
     }
 
     /**
@@ -1150,6 +1314,8 @@ class Renderer {
      * @private
      */
     _applyCamera() {
+        if (!this.ctx) return;
+        
         // Only apply camera transformations if camera is not at default position/values
         if (this.camera.x !== 0 || this.camera.y !== 0 || this.camera.scale !== 1 || this.camera.rotation !== 0) {
             this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
@@ -1164,7 +1330,9 @@ class Renderer {
      * @private
      */
     _applyPreEffects() {
-        this.preEffects.forEach(effect => effect.apply(this.ctx));
+        if (this.ctx) {
+            this.preEffects.forEach(effect => effect.apply(this.ctx));
+        }
     }
 
     /**
@@ -1172,7 +1340,9 @@ class Renderer {
      * @private
      */
     _applyPostEffects() {
-        this.effects.forEach(effect => effect.apply(this.ctx));
+        if (this.ctx) {
+            this.effects.forEach(effect => effect.apply(this.ctx));
+        }
     }
 
     /**
@@ -1453,6 +1623,8 @@ class Renderer {
         this.camera.rotation = rotation;
     }
 }
+
+// Three.js renderer has been removed - ProofCanvas now uses only 2D rendering
 
 /**
  * Asset management system for loading and caching images, spritesheets, and other resources
@@ -2398,6 +2570,2943 @@ class SoundManager {
         this.sounds.clear();
         this.music.clear();
         this.loadingPromises.clear();
+    }
+}
+
+/**
+ * StorageManager - Simple localStorage wrapper with game-specific prefixing
+ * Provides easy key-value storage for game data persistence
+ * 
+ * Features:
+ * - Automatic game-specific prefixing to avoid conflicts
+ * - JSON serialization/deserialization
+ * - Type-safe storage and retrieval
+ * - Batch operations support
+ * - Storage quota management
+ * 
+ * @example
+ * // Save game state
+ * game.storage.set('playerLevel', 5);
+ * game.storage.set('playerStats', { health: 100, mana: 50 });
+ * 
+ * // Load game state
+ * const level = game.storage.get('playerLevel', 1); // Default to 1 if not found
+ * const stats = game.storage.get('playerStats', { health: 100, mana: 100 });
+ * 
+ * // Check if save exists
+ * if (game.storage.has('saveGame')) {
+ *   const saveData = game.storage.get('saveGame');
+ * }
+ * 
+ * // Clear specific keys or all game data
+ * game.storage.remove('tempData');
+ * game.storage.clear(); // Clears only this game's data
+ */
+class StorageManager {
+    constructor(game) {
+        this.game = game;
+        
+        // Generate storage prefix from game config
+        // Use game name if provided, otherwise use a default prefix
+        this.prefix = this._generatePrefix();
+        
+        // Cache for frequently accessed data
+        this.cache = new Map();
+        this.cacheEnabled = true;
+        
+        // Check localStorage availability
+        this.isAvailable = this._checkLocalStorage();
+        
+        if (!this.isAvailable) {
+            console.warn('localStorage is not available. Storage operations will fail silently.');
+        }
+    }
+    
+    /**
+     * Generate storage prefix from game configuration
+     * @private
+     * @returns {string} Storage prefix
+     */
+    _generatePrefix() {
+        // Try to get game name from config
+        const gameName = this.game.config.gameName || 
+                        this.game.config.name || 
+                        'proofcanvas_game';
+        
+        // Sanitize game name for use as prefix
+        const sanitized = gameName
+            .toLowerCase()
+            .replace(/[^a-z0-9_]/g, '_')
+            .replace(/_+/g, '_');
+        
+        return `${sanitized}_`;
+    }
+    
+    /**
+     * Check if localStorage is available
+     * @private
+     * @returns {boolean} True if localStorage is available
+     */
+    _checkLocalStorage() {
+        try {
+            const test = '__proofcanvas_test__';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Get the full storage key with prefix
+     * @private
+     * @param {string} key - Storage key
+     * @returns {string} Prefixed key
+     */
+    _getFullKey(key) {
+        return `${this.prefix}${key}`;
+    }
+    
+    /**
+     * Set a value in storage
+     * @param {string} key - Storage key
+     * @param {*} value - Value to store (will be JSON stringified)
+     * @returns {boolean} True if successful
+     */
+    set(key, value) {
+        if (!this.isAvailable) return false;
+        
+        try {
+            const fullKey = this._getFullKey(key);
+            const serialized = JSON.stringify(value);
+            
+            localStorage.setItem(fullKey, serialized);
+            
+            // Update cache
+            if (this.cacheEnabled) {
+                this.cache.set(key, value);
+            }
+            
+            return true;
+        } catch (e) {
+            // Handle quota exceeded or other errors
+            if (e.name === 'QuotaExceededError') {
+                console.error('localStorage quota exceeded. Consider clearing old data.');
+            } else {
+                console.error('Error saving to localStorage:', e);
+            }
+            return false;
+        }
+    }
+    
+    /**
+     * Get a value from storage
+     * @param {string} key - Storage key
+     * @param {*} defaultValue - Default value if key doesn't exist
+     * @returns {*} Stored value or default
+     */
+    get(key, defaultValue = null) {
+        if (!this.isAvailable) return defaultValue;
+        
+        // Check cache first
+        if (this.cacheEnabled && this.cache.has(key)) {
+            return this.cache.get(key);
+        }
+        
+        try {
+            const fullKey = this._getFullKey(key);
+            const item = localStorage.getItem(fullKey);
+            
+            if (item === null) {
+                return defaultValue;
+            }
+            
+            const value = JSON.parse(item);
+            
+            // Update cache
+            if (this.cacheEnabled) {
+                this.cache.set(key, value);
+            }
+            
+            return value;
+        } catch (e) {
+            console.error('Error reading from localStorage:', e);
+            return defaultValue;
+        }
+    }
+    
+    /**
+     * Check if a key exists in storage
+     * @param {string} key - Storage key
+     * @returns {boolean} True if key exists
+     */
+    has(key) {
+        if (!this.isAvailable) return false;
+        
+        const fullKey = this._getFullKey(key);
+        return localStorage.getItem(fullKey) !== null;
+    }
+    
+    /**
+     * Remove a key from storage
+     * @param {string} key - Storage key
+     * @returns {boolean} True if successful
+     */
+    remove(key) {
+        if (!this.isAvailable) return false;
+        
+        try {
+            const fullKey = this._getFullKey(key);
+            localStorage.removeItem(fullKey);
+            
+            // Remove from cache
+            if (this.cacheEnabled) {
+                this.cache.delete(key);
+            }
+            
+            return true;
+        } catch (e) {
+            console.error('Error removing from localStorage:', e);
+            return false;
+        }
+    }
+    
+    /**
+     * Clear all storage for this game (only items with this game's prefix)
+     * @returns {boolean} True if successful
+     */
+    clear() {
+        if (!this.isAvailable) return false;
+        
+        try {
+            // Get all keys with our prefix
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith(this.prefix)) {
+                    keysToRemove.push(key);
+                }
+            }
+            
+            // Remove all prefixed keys
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            
+            // Clear cache
+            if (this.cacheEnabled) {
+                this.cache.clear();
+            }
+            
+            console.log(`Cleared ${keysToRemove.length} storage items for game '${this.prefix}'`);
+            return true;
+        } catch (e) {
+            console.error('Error clearing localStorage:', e);
+            return false;
+        }
+    }
+    
+    /**
+     * Get all keys for this game
+     * @returns {Array<string>} Array of storage keys (without prefix)
+     */
+    getAllKeys() {
+        if (!this.isAvailable) return [];
+        
+        const keys = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const fullKey = localStorage.key(i);
+            if (fullKey && fullKey.startsWith(this.prefix)) {
+                // Remove prefix from key
+                keys.push(fullKey.substring(this.prefix.length));
+            }
+        }
+        
+        return keys;
+    }
+    
+    /**
+     * Get all stored data for this game
+     * @returns {Object} Object with all key-value pairs
+     */
+    getAll() {
+        if (!this.isAvailable) return {};
+        
+        const data = {};
+        const keys = this.getAllKeys();
+        
+        keys.forEach(key => {
+            data[key] = this.get(key);
+        });
+        
+        return data;
+    }
+    
+    /**
+     * Set multiple values at once
+     * @param {Object} data - Object with key-value pairs
+     * @returns {boolean} True if all successful
+     */
+    setMultiple(data) {
+        if (!this.isAvailable) return false;
+        
+        let allSuccess = true;
+        
+        for (const [key, value] of Object.entries(data)) {
+            if (!this.set(key, value)) {
+                allSuccess = false;
+            }
+        }
+        
+        return allSuccess;
+    }
+    
+    /**
+     * Get storage size for this game (approximate)
+     * @returns {number} Size in bytes
+     */
+    getSize() {
+        if (!this.isAvailable) return 0;
+        
+        let size = 0;
+        const keys = this.getAllKeys();
+        
+        keys.forEach(key => {
+            const fullKey = this._getFullKey(key);
+            const item = localStorage.getItem(fullKey);
+            if (item) {
+                // Rough estimate: 2 bytes per character (UTF-16)
+                size += (fullKey.length + item.length) * 2;
+            }
+        });
+        
+        return size;
+    }
+    
+    /**
+     * Export all game data as JSON string
+     * @returns {string} JSON string of all data
+     */
+    exportData() {
+        const data = this.getAll();
+        return JSON.stringify(data, null, 2);
+    }
+    
+    /**
+     * Import game data from JSON string
+     * @param {string} jsonString - JSON string to import
+     * @param {boolean} merge - If true, merge with existing data. If false, replace.
+     * @returns {boolean} True if successful
+     */
+    importData(jsonString, merge = false) {
+        try {
+            const data = JSON.parse(jsonString);
+            
+            if (!merge) {
+                this.clear();
+            }
+            
+            return this.setMultiple(data);
+        } catch (e) {
+            console.error('Error importing data:', e);
+            return false;
+        }
+    }
+    
+    /**
+     * Enable or disable caching
+     * @param {boolean} enabled - Whether to enable caching
+     */
+    setCacheEnabled(enabled) {
+        this.cacheEnabled = enabled;
+        if (!enabled) {
+            this.cache.clear();
+        }
+    }
+    
+    /**
+     * Clear the cache (forces reload from localStorage on next access)
+     */
+    clearCache() {
+        this.cache.clear();
+    }
+}
+
+/**
+ * NetworkManager - Comprehensive REST API and WebSocket client for ProofNetwork integration
+ * Provides seamless blockchain communication for games and applications
+ * 
+ * Features:
+ * - REST API client for contract calls and blockchain operations
+ * - WebSocket support for real-time updates and events
+ * - Intelligent request caching with TTL support
+ * - Automatic reconnection with exponential backoff
+ * - Event subscription system for contract monitoring
+ * - Authentication token management
+ * - Request queue with retry logic
+ * 
+ * @example
+ * // Call a ProofNetwork contract
+ * const result = await game.network.callContract('coinflip', 'flip', { bet: 100 });
+ * 
+ * // Get contract state
+ * const state = await game.network.getContractState('coinflip');
+ * 
+ * // Subscribe to contract events
+ * game.network.subscribe('contract:coinflip:gameComplete', (data) => {
+ *   console.log('Game completed:', data);
+ * });
+ * 
+ * // Get VRF random numbers
+ * const randomValues = await game.network.getVRF({ min: 1, max: 100, count: 5 });
+ */
+class NetworkManager {
+    constructor(game) {
+        this.game = game;
+        
+        // Configuration
+        this.baseURL = window.location.origin.includes('localhost') 
+            ? 'http://localhost:5001/api' 
+            : `${window.location.origin}/api`;
+        this.wsURL = window.location.origin.includes('localhost')
+            ? 'ws://localhost:5001'
+            : `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`;
+        
+        // WebSocket connection
+        this.websocket = null;
+        this.wsConnected = false;
+        this.wsReconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectDelay = 1000;
+        
+        // Request management
+        this.requestQueue = [];
+        this.activeRequests = new Map();
+        this.requestId = 0;
+        
+        // Caching system
+        this.cache = new Map();
+        this.cacheEnabled = false;
+        this.defaultCacheTTL = 60000; // 1 minute
+        
+        // Event subscriptions
+        this.subscriptions = new Map();
+        this.eventHandlers = new Map();
+        
+        // Authentication
+        this.authToken = null;
+        this.refreshToken = null;
+        
+        // Statistics
+        this.stats = {
+            requestCount: 0,
+            successCount: 0,
+            errorCount: 0,
+            cacheHits: 0,
+            wsReconnects: 0
+        };
+        
+        console.log('NetworkManager initialized');
+    }
+
+    /**
+     * Initialize WebSocket connection
+     * @returns {Promise<boolean>} True if connected successfully
+     */
+    async connect() {
+        if (this.websocket && this.wsConnected) {
+            return true;
+        }
+
+        return new Promise((resolve) => {
+            try {
+                this.websocket = new WebSocket(this.wsURL);
+                
+                this.websocket.onopen = () => {
+                    this.wsConnected = true;
+                    this.wsReconnectAttempts = 0;
+                    console.log('NetworkManager WebSocket connected');
+                    
+                    // Send auth token if available
+                    if (this.authToken) {
+                        this.send({ type: 'auth', token: this.authToken });
+                    }
+                    
+                    resolve(true);
+                };
+                
+                this.websocket.onmessage = (event) => {
+                    this._handleWebSocketMessage(event);
+                };
+                
+                this.websocket.onclose = () => {
+                    this.wsConnected = false;
+                    console.log('NetworkManager WebSocket disconnected');
+                    this._handleWebSocketReconnect();
+                };
+                
+                this.websocket.onerror = (error) => {
+                    console.error('NetworkManager WebSocket error:', error);
+                    resolve(false);
+                };
+                
+                // Timeout fallback
+                setTimeout(() => {
+                    if (!this.wsConnected) {
+                        resolve(false);
+                    }
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Failed to create WebSocket connection:', error);
+                resolve(false);
+            }
+        });
+    }
+
+    /**
+     * Disconnect WebSocket
+     */
+    disconnect() {
+        if (this.websocket) {
+            this.websocket.close();
+            this.websocket = null;
+            this.wsConnected = false;
+        }
+    }
+
+    /**
+     * Call a ProofNetwork smart contract
+     * @param {string} contractName - Contract identifier
+     * @param {string} method - Method name to call
+     * @param {Object} params - Method parameters
+     * @param {Object} options - Request options
+     * @returns {Promise<any>} Contract execution result
+     */
+    async callContract(contractName, method, params = {}, options = {}) {
+        const cacheKey = options.cache ? `contract:${contractName}:${method}:${JSON.stringify(params)}` : null;
+        
+        // Check cache first
+        if (cacheKey && this._getCachedResult(cacheKey)) {
+            this.stats.cacheHits++;
+            return this._getCachedResult(cacheKey);
+        }
+
+        const requestData = {
+            contractName,
+            method,
+            params,
+            requestId: ++this.requestId,
+            timestamp: Date.now()
+        };
+
+        try {
+            this.stats.requestCount++;
+            
+            const response = await this._makeRequest('POST', '/blockchain/call-contract', requestData);
+            
+            if (response.success) {
+                this.stats.successCount++;
+                
+                // Cache successful results
+                if (cacheKey) {
+                    this._setCachedResult(cacheKey, response.result, options.cacheTTL);
+                }
+                
+                return response.result;
+            } else {
+                throw new Error(response.error || 'Contract call failed');
+            }
+            
+        } catch (error) {
+            this.stats.errorCount++;
+            console.error(`Contract call failed [${contractName}.${method}]:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get the current state of a contract
+     * @param {string} contractName - Contract identifier
+     * @param {Object} options - Request options
+     * @returns {Promise<any>} Contract state
+     */
+    async getContractState(contractName, options = {}) {
+        const cacheKey = options.cache ? `state:${contractName}` : null;
+        
+        if (cacheKey && this._getCachedResult(cacheKey)) {
+            this.stats.cacheHits++;
+            return this._getCachedResult(cacheKey);
+        }
+
+        try {
+            this.stats.requestCount++;
+            
+            const response = await this._makeRequest('GET', `/blockchain/contract-state/${contractName}`);
+            
+            if (response.success) {
+                this.stats.successCount++;
+                
+                if (cacheKey) {
+                    this._setCachedResult(cacheKey, response.state, options.cacheTTL || 30000);
+                }
+                
+                return response.state;
+            } else {
+                throw new Error(response.error || 'Failed to get contract state');
+            }
+            
+        } catch (error) {
+            this.stats.errorCount++;
+            console.error(`Get contract state failed [${contractName}]:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Deploy a new contract to the blockchain
+     * @param {string} contractCode - JavaScript contract code
+     * @param {Object} metadata - Contract metadata
+     * @returns {Promise<any>} Deployment result
+     */
+    async deployContract(contractCode, metadata) {
+        try {
+            this.stats.requestCount++;
+            
+            const response = await this._makeRequest('POST', '/blockchain/deploy-contract', {
+                contractCode,
+                metadata,
+                requestId: ++this.requestId,
+                timestamp: Date.now()
+            });
+            
+            if (response.success) {
+                this.stats.successCount++;
+                return response.result;
+            } else {
+                throw new Error(response.error || 'Contract deployment failed');
+            }
+            
+        } catch (error) {
+            this.stats.errorCount++;
+            console.error('Contract deployment failed:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get VRF (Verifiable Random Function) values
+     * @param {Object} params - VRF parameters
+     * @param {number} params.min - Minimum value
+     * @param {number} params.max - Maximum value  
+     * @param {number} params.count - Number of values to generate
+     * @returns {Promise<number[]>} Array of random values
+     */
+    async getVRF(params = {}) {
+        const { min = 1, max = 100, count = 1 } = params;
+        
+        try {
+            this.stats.requestCount++;
+            
+            const response = await this._makeRequest('POST', '/vrf/generate', {
+                min,
+                max,
+                count,
+                requestId: ++this.requestId,
+                timestamp: Date.now()
+            });
+            
+            if (response.success) {
+                this.stats.successCount++;
+                return response.values;
+            } else {
+                throw new Error(response.error || 'VRF generation failed');
+            }
+            
+        } catch (error) {
+            this.stats.errorCount++;
+            console.error('VRF generation failed:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get transaction history for an address
+     * @param {string} address - Wallet address
+     * @param {Object} options - Query options
+     * @returns {Promise<Array>} Transaction history
+     */
+    async getTransactionHistory(address, options = {}) {
+        try {
+            this.stats.requestCount++;
+            
+            const queryParams = new URLSearchParams({
+                address,
+                ...options
+            }).toString();
+            
+            const response = await this._makeRequest('GET', `/blockchain/transactions?${queryParams}`);
+            
+            if (response.success) {
+                this.stats.successCount++;
+                return response.transactions;
+            } else {
+                throw new Error(response.error || 'Failed to get transaction history');
+            }
+            
+        } catch (error) {
+            this.stats.errorCount++;
+            console.error('Get transaction history failed:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Subscribe to events via WebSocket
+     * @param {string} event - Event name to subscribe to
+     * @param {Function} callback - Event handler function
+     */
+    subscribe(event, callback) {
+        if (!this.subscriptions.has(event)) {
+            this.subscriptions.set(event, new Set());
+        }
+        
+        this.subscriptions.get(event).add(callback);
+        
+        // Send subscription message via WebSocket
+        if (this.wsConnected) {
+            this.send({
+                type: 'subscribe',
+                event: event
+            });
+        }
+        
+        console.log(`Subscribed to event: ${event}`);
+    }
+
+    /**
+     * Unsubscribe from events
+     * @param {string} event - Event name to unsubscribe from
+     * @param {Function} callback - Specific callback to remove (optional)
+     */
+    unsubscribe(event, callback = null) {
+        if (this.subscriptions.has(event)) {
+            if (callback) {
+                this.subscriptions.get(event).delete(callback);
+                if (this.subscriptions.get(event).size === 0) {
+                    this.subscriptions.delete(event);
+                }
+            } else {
+                this.subscriptions.delete(event);
+            }
+            
+            // Send unsubscription message via WebSocket
+            if (this.wsConnected) {
+                this.send({
+                    type: 'unsubscribe',
+                    event: event
+                });
+            }
+            
+            console.log(`Unsubscribed from event: ${event}`);
+        }
+    }
+
+    /**
+     * Send a message via WebSocket
+     * @param {Object} message - Message to send
+     */
+    send(message) {
+        if (this.wsConnected && this.websocket) {
+            this.websocket.send(JSON.stringify(message));
+        } else {
+            console.warn('WebSocket not connected, message queued');
+            this.requestQueue.push(message);
+        }
+    }
+
+    /**
+     * Set authentication token
+     * @param {string} token - Auth token
+     * @param {string} refreshToken - Refresh token (optional)
+     */
+    setAuth(token, refreshToken = null) {
+        this.authToken = token;
+        this.refreshToken = refreshToken;
+        
+        // Send auth via WebSocket if connected
+        if (this.wsConnected) {
+            this.send({ type: 'auth', token });
+        }
+    }
+
+    /**
+     * Enable caching with default TTL
+     * @param {number} ttl - Default cache TTL in milliseconds
+     */
+    enableCache(ttl = 60000) {
+        this.cacheEnabled = true;
+        this.defaultCacheTTL = ttl;
+        console.log(`NetworkManager cache enabled with ${ttl}ms TTL`);
+    }
+
+    /**
+     * Clear all cached data
+     */
+    clearCache() {
+        this.cache.clear();
+        console.log('NetworkManager cache cleared');
+    }
+
+    /**
+     * Get network statistics
+     * @returns {Object} Network statistics
+     */
+    getStats() {
+        return {
+            ...this.stats,
+            wsConnected: this.wsConnected,
+            cacheSize: this.cache.size,
+            subscriptions: this.subscriptions.size,
+            activeRequests: this.activeRequests.size
+        };
+    }
+
+    /**
+     * Make HTTP request to ProofNetwork API
+     * @param {string} method - HTTP method
+     * @param {string} endpoint - API endpoint
+     * @param {Object} data - Request data
+     * @returns {Promise<any>} Response data
+     * @private
+     */
+    async _makeRequest(method, endpoint, data = null) {
+        const url = `${this.baseURL}${endpoint}`;
+        
+        const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(this.authToken && { 'Authorization': `Bearer ${this.authToken}` })
+            }
+        };
+        
+        if (data && (method === 'POST' || method === 'PUT')) {
+            options.body = JSON.stringify(data);
+        }
+        
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        return await response.json();
+    }
+
+    /**
+     * Handle incoming WebSocket messages
+     * @param {MessageEvent} event - WebSocket message event
+     * @private
+     */
+    _handleWebSocketMessage(event) {
+        try {
+            const message = JSON.parse(event.data);
+            
+            switch (message.type) {
+                case 'event':
+                    this._handleEventMessage(message);
+                    break;
+                case 'response':
+                    this._handleResponseMessage(message);
+                    break;
+                case 'error':
+                    console.error('WebSocket error:', message.error);
+                    break;
+                case 'ping':
+                    this.send({ type: 'pong' });
+                    break;
+                default:
+                    console.warn('Unknown WebSocket message type:', message.type);
+            }
+            
+        } catch (error) {
+            console.error('Failed to parse WebSocket message:', error);
+        }
+    }
+
+    /**
+     * Handle event messages from WebSocket
+     * @param {Object} message - Event message
+     * @private
+     */
+    _handleEventMessage(message) {
+        const { event, data } = message;
+        
+        if (this.subscriptions.has(event)) {
+            for (const callback of this.subscriptions.get(event)) {
+                try {
+                    callback(data);
+                } catch (error) {
+                    console.error(`Error in event callback for ${event}:`, error);
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle response messages from WebSocket
+     * @param {Object} message - Response message
+     * @private
+     */
+    _handleResponseMessage(message) {
+        const { requestId, data, error } = message;
+        
+        if (this.activeRequests.has(requestId)) {
+            const { resolve, reject } = this.activeRequests.get(requestId);
+            this.activeRequests.delete(requestId);
+            
+            if (error) {
+                reject(new Error(error));
+            } else {
+                resolve(data);
+            }
+        }
+    }
+
+    /**
+     * Handle WebSocket reconnection
+     * @private
+     */
+    _handleWebSocketReconnect() {
+        if (this.wsReconnectAttempts >= this.maxReconnectAttempts) {
+            console.error('Max WebSocket reconnect attempts reached');
+            return;
+        }
+        
+        this.wsReconnectAttempts++;
+        this.stats.wsReconnects++;
+        
+        const delay = this.reconnectDelay * Math.pow(2, this.wsReconnectAttempts - 1);
+        
+        console.log(`Attempting WebSocket reconnection ${this.wsReconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`);
+        
+        setTimeout(() => {
+            this.connect().then(connected => {
+                if (connected) {
+                    // Reprocess queued messages
+                    while (this.requestQueue.length > 0) {
+                        const message = this.requestQueue.shift();
+                        this.send(message);
+                    }
+                    
+                    // Resubscribe to events
+                    for (const event of this.subscriptions.keys()) {
+                        this.send({ type: 'subscribe', event });
+                    }
+                }
+            });
+        }, delay);
+    }
+
+    /**
+     * Get cached result if available and not expired
+     * @param {string} key - Cache key
+     * @returns {any|null} Cached result or null
+     * @private
+     */
+    _getCachedResult(key) {
+        if (!this.cacheEnabled || !this.cache.has(key)) {
+            return null;
+        }
+        
+        const { data, expiry } = this.cache.get(key);
+        
+        if (Date.now() > expiry) {
+            this.cache.delete(key);
+            return null;
+        }
+        
+        return data;
+    }
+
+    /**
+     * Set cached result with expiry
+     * @param {string} key - Cache key
+     * @param {any} data - Data to cache
+     * @param {number} ttl - Time to live in milliseconds
+     * @private
+     */
+    _setCachedResult(key, data, ttl = null) {
+        if (!this.cacheEnabled) return;
+        
+        const expiry = Date.now() + (ttl || this.defaultCacheTTL);
+        this.cache.set(key, { data, expiry });
+    }
+}
+
+/**
+ * WalletManager - Solana wallet integration for signing messages and transactions
+ * Provides seamless wallet connectivity and transaction management for blockchain games
+ * 
+ * Features:
+ * - Wallet connection management (Phantom, Solflare, etc.)
+ * - Message signing for authentication
+ * - Transaction signing and sending
+ * - Base58/Base64 transaction format detection
+ * - Batch transaction support
+ * - Connection status monitoring
+ * 
+ * @example
+ * // Connect wallet
+ * const connected = await game.wallet.connect();
+ * 
+ * // Sign a message for authentication
+ * const signature = await game.wallet.signMessage('Hello ProofCanvas!');
+ * 
+ * // Sign and send a transaction
+ * const result = await game.wallet.signAndSendTransaction(transactionBase64);
+ * 
+ * // Check connection status
+ * if (game.wallet.isConnected()) {
+ *   console.log('Wallet address:', game.wallet.getPublicKey());
+ * }
+ */
+class WalletManager {
+    constructor(game) {
+        this.game = game;
+        this.provider = null;
+        this.connection = null;
+        this.publicKey = null;
+        this.isConnectedState = false;
+        
+        // Configuration
+        this.rpcEndpoint = 'https://mainnet.helius-rpc.com/?api-key=39ce0457-df99-4207-9036-882d82d30349';
+        this.maxRetries = 3;
+        this.retryDelay = 1000;
+        
+        // Local wallet properties
+        this.localWallet = {
+            keypair: null,
+            publicKey: null,
+            privateKey: null,
+            isLocal: false
+        };
+        this.walletType = null; // 'external' or 'local'
+        
+        // Event listeners
+        this.eventListeners = {
+            connect: [],
+            disconnect: [],
+            accountChanged: []
+        };
+        
+        // Wait for Solana Web3 to be available
+        this._waitForSolana();
+    }
+    
+    /**
+     * Wait for Solana Web3 libraries to load
+     * @private
+     */
+    _waitForSolana() {
+        const checkSolana = () => {
+            // Check for window.solana for external wallet support
+            if (typeof window.solana !== 'undefined') {
+                this._setupEventListeners();
+            }
+            
+            // Check for window.solanaWeb3 for local wallet and connection support
+            if (typeof window.solanaWeb3 !== 'undefined' && window.solanaWeb3.Connection) {
+                this._initializeConnection();
+                
+                // Now that Solana Web3 is ready, try auto-loading local wallet
+                setTimeout(() => this._autoLoadLocalWallet(), 200);
+                
+                console.log('Solana Web3 libraries loaded and ready');
+                return; // All done
+            }
+            
+            // Keep checking every 500ms
+            setTimeout(checkSolana, 500);
+        };
+        checkSolana();
+    }
+    
+    /**
+     * Initialize Solana connection
+     * @private
+     */
+    _initializeConnection() {
+        if (typeof window.solanaWeb3 !== 'undefined' && window.solanaWeb3.Connection) {
+            this.connection = new window.solanaWeb3.Connection(this.rpcEndpoint);
+            console.log('Solana connection initialized:', this.connection.rpcEndpoint);
+        } else {
+            console.warn('Solana Web3 Connection not available');
+        }
+    }
+    
+    /**
+     * Setup wallet event listeners
+     * @private
+     */
+    _setupEventListeners() {
+        // Monitor wallet changes
+        if (window.solana) {
+            window.solana.on('connect', () => {
+                this._handleConnect();
+            });
+            
+            window.solana.on('disconnect', () => {
+                this._handleDisconnect();
+            });
+            
+            window.solana.on('accountChanged', (publicKey) => {
+                this._handleAccountChanged(publicKey);
+            });
+        }
+    }
+    
+    /**
+     * Handle wallet connection
+     * @private
+     */
+    _handleConnect() {
+        this.isConnectedState = true;
+        
+        // Debug: Log current state
+        console.log('_handleConnect called with:', {
+            walletType: this.walletType,
+            publicKey: this.publicKey?.toString(),
+            localWalletPublicKey: this.localWallet.publicKey?.toString(),
+            providerPublicKey: this.provider?.publicKey?.toString()
+        });
+        
+        // Ensure public key is set from the correct source
+        if (this.walletType === 'local') {
+            // For local wallet, always use the local wallet's public key
+            this.publicKey = this.localWallet.publicKey;
+            console.log('Using local wallet public key:', this.publicKey?.toString());
+        } else if (this.walletType === 'external') {
+            // For external wallet, always use the provider's public key
+            this.publicKey = this.provider?.publicKey;
+            console.log('Using external wallet public key:', this.publicKey?.toString());
+        }
+        
+        this.eventListeners.connect.forEach(callback => callback(this.publicKey));
+        console.log('Wallet connected:', this.publicKey?.toString());
+    }
+    
+    /**
+     * Handle wallet disconnection
+     * @private
+     */
+    _handleDisconnect() {
+        this.isConnectedState = false;
+        this.publicKey = null;
+        this.walletType = null;
+        this.provider = null;
+        this.eventListeners.disconnect.forEach(callback => callback());
+        console.log('Wallet disconnected');
+    }
+    
+    /**
+     * Handle account change
+     * @private
+     */
+    _handleAccountChanged(publicKey) {
+        this.publicKey = publicKey;
+        this.eventListeners.accountChanged.forEach(callback => callback(publicKey));
+        console.log('Account changed:', publicKey?.toString());
+    }
+    
+    /**
+     * Auto-load local wallet if available (without password)
+     * @private
+     */
+    async _autoLoadLocalWallet() {
+        // Wait for Solana Web3 to be available first
+        if (!window.solanaWeb3?.Keypair) {
+            console.log('Waiting for Solana Web3 to load before auto-loading wallet...');
+            return; // Will be called again after Solana Web3 loads
+        }
+        
+        if (this.hasLocalWallet()) {
+            const walletInfo = this.getLocalWalletInfo();
+            console.log('Found local wallet:', walletInfo);
+            
+            // Only auto-load if not encrypted
+            if (!walletInfo.encrypted) {
+                try {
+                    const loaded = await this.loadLocalWallet();
+                    if (loaded) {
+                        console.log('✅ Auto-loaded local wallet:', this.getPublicKey());
+                    } else {
+                        console.log('❌ Failed to auto-load local wallet');
+                    }
+                } catch (error) {
+                    console.warn('❌ Failed to auto-load local wallet:', error);
+                }
+            } else {
+                console.log('📁 Local wallet found but requires password');
+            }
+        } else {
+            console.log('💾 No local wallet found in storage');
+        }
+    }
+    
+    /**
+     * Connect to wallet
+     * @param {Object} options - Connection options
+     * @returns {Promise<boolean>} True if connected successfully
+     */
+    async connect(options = {}) {
+        try {
+            // First, disconnect any existing connection
+            if (this.isConnectedState) {
+                console.log('Disconnecting existing wallet before connecting new one...');
+                await this.disconnect();
+            }
+            
+            // Check for preference to use local wallet
+            if (options.preferLocal && this.hasLocalWallet()) {
+                const loaded = await this.loadLocalWallet(options.password);
+                if (loaded) {
+                    return true;
+                }
+            }
+            
+            // Try external wallet (Phantom first, then fallback to window.solana)
+            this.provider = window.phantom?.solana || window.solana;
+            
+            if (!this.provider) {
+                // If no external wallet found, try to use local wallet as fallback
+                if (this.hasLocalWallet()) {
+                    console.log('No external wallet found, trying local wallet...');
+                    const loaded = await this.loadLocalWallet(options.password);
+                    if (loaded) {
+                        return true;
+                    }
+                }
+                throw new Error('No Solana wallet found. Please install Phantom or create a local wallet.');
+            }
+            
+            if (!this.provider.isConnected) {
+                await this.provider.connect(options);
+            }
+            
+            // Clear any local wallet state when connecting to external
+            this.localWallet.isLocal = false;
+            
+            this.isConnectedState = this.provider.isConnected;
+            this.publicKey = this.provider.publicKey;
+            this.walletType = 'external';
+            
+            console.log('External wallet connected successfully:', this.publicKey?.toString());
+            
+            // Call the handle connect method to notify listeners
+            this._handleConnect();
+            
+            return true;
+        } catch (error) {
+            console.error('Failed to connect wallet:', error);
+            this.isConnectedState = false;
+            this.publicKey = null;
+            this.walletType = null;
+            return false;
+        }
+    }
+    
+    /**
+     * Disconnect wallet
+     * @returns {Promise<void>}
+     */
+    async disconnect() {
+        try {
+            if (this.provider && this.provider.isConnected) {
+                await this.provider.disconnect();
+            }
+            this._handleDisconnect();
+        } catch (error) {
+            console.error('Error disconnecting wallet:', error);
+        }
+    }
+    
+    /**
+     * Check if wallet is connected
+     * @returns {boolean} True if connected
+     */
+    isConnected() {
+        if (this.walletType === 'local') {
+            return this.isConnectedState && this.localWallet.isLocal;
+        } else if (this.walletType === 'external') {
+            return this.isConnectedState && this.provider?.isConnected;
+        }
+        return false;
+    }
+    
+    /**
+     * Get wallet public key
+     * @returns {string|null} Public key string or null if not connected
+     */
+    getPublicKey() {
+        // Always return the current wallet's public key based on wallet type
+        if (this.walletType === 'local' && this.localWallet.publicKey) {
+            return this.localWallet.publicKey.toString();
+        } else if (this.walletType === 'external' && this.provider?.publicKey) {
+            return this.provider.publicKey.toString();
+        } else if (this.publicKey) {
+            return this.publicKey.toString();
+        }
+        return null;
+    }
+    
+    /**
+     * Sign a message for authentication
+     * @param {string} message - Message to sign
+     * @param {string} encoding - Encoding format ('utf8' or 'hex')
+     * @returns {Promise<string>} Base64 encoded signature
+     */
+    async signMessage(message, encoding = 'utf8') {
+        if (!this.isConnected()) {
+            throw new Error('Wallet not connected. Please connect first.');
+        }
+        
+        try {
+            // Use local wallet if available
+            if (this.walletType === 'local') {
+                return await this._signMessageWithLocalWallet(message, encoding);
+            }
+            
+            // Use external wallet provider
+            const messageBytes = encoding === 'hex' 
+                ? Buffer.from(message, 'hex')
+                : Buffer.from(message, 'utf8');
+            
+            const signedMessage = await this.provider.signMessage(messageBytes);
+            const signature = Buffer.from(signedMessage.signature).toString('base64');
+            
+            console.log('Message signed successfully');
+            return signature;
+        } catch (error) {
+            console.error('Failed to sign message:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Sign and send a transaction
+     * @param {string|Array<string>} transaction - Transaction(s) in base64 or base58 format
+     * @param {Object} options - Transaction options
+     * @returns {Promise<Object>} Result with signature and success status
+     */
+    async signAndSendTransaction(transaction, options = {}) {
+        if (!this.isConnected()) {
+            throw new Error('Wallet not connected. Please connect first.');
+        }
+        
+        if (!this.connection) {
+            throw new Error('Solana connection not initialized');
+        }
+        
+        try {
+            // Handle single transaction
+            if (typeof transaction === 'string') {
+                return await this._processSingleTransaction(transaction, options);
+            }
+            
+            // Handle array of transactions
+            if (Array.isArray(transaction)) {
+                return await this._processBatchTransactions(transaction, options);
+            }
+            
+            throw new Error('Invalid transaction format');
+        } catch (error) {
+            console.error('Transaction failed:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Process a single transaction
+     * @param {string} txString - Transaction string
+     * @param {Object} options - Processing options
+     * @returns {Promise<Object>} Transaction result
+     * @private
+     */
+    async _processSingleTransaction(txString, options) {
+        // Detect encoding and deserialize
+        const txObject = this._deserializeTransaction(txString);
+        
+        // Get fresh blockhash
+        const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash();
+        console.log('Got fresh blockhash:', blockhash);
+        
+        // Update transaction with fresh blockhash
+        this._updateBlockhash(txObject, blockhash);
+        
+        // Sign the transaction
+        let signedTx;
+        if (this.walletType === 'local') {
+            signedTx = this._signTransactionWithLocalWallet(txObject);
+            console.log('Transaction signed by local wallet');
+        } else {
+            signedTx = await this.provider.signTransaction(txObject);
+            console.log('Transaction signed by external wallet');
+        }
+        
+        // Send the signed transaction
+        const signature = await this.connection.sendRawTransaction(signedTx.serialize(), {
+            skipPreflight: options.skipPreflight || false,
+            preflightCommitment: 'processed',
+            maxRetries: this.maxRetries
+        });
+        
+        console.log('Transaction sent with signature:', signature);
+        
+        // Wait for confirmation
+        const confirmation = await this.connection.confirmTransaction({
+            signature,
+            blockhash,
+            lastValidBlockHeight
+        });
+        
+        if (confirmation.value.err) {
+            throw new Error(`Transaction failed: ${confirmation.value.err}`);
+        }
+        
+        return { signature, success: true };
+    }
+    
+    /**
+     * Process batch transactions
+     * @param {Array<string>} transactions - Array of transaction strings
+     * @param {Object} options - Processing options
+     * @returns {Promise<Object>} Batch result
+     * @private
+     */
+    async _processBatchTransactions(transactions, options) {
+        // Deserialize all transactions
+        const txObjects = transactions.map(txString => this._deserializeTransaction(txString));
+        
+        // Get fresh blockhash for all transactions
+        const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash();
+        console.log('Got blockhash for batch:', blockhash);
+        
+        // Update all transactions with fresh blockhash
+        txObjects.forEach(tx => this._updateBlockhash(tx, blockhash));
+        
+        // Sign all transactions
+        let signedTransactions;
+        if (this.walletType === 'local') {
+            signedTransactions = txObjects.map(tx => this._signTransactionWithLocalWallet(tx));
+            console.log(`Signed ${signedTransactions.length} transactions with local wallet`);
+        } else {
+            signedTransactions = await this.provider.signAllTransactions(txObjects);
+            console.log(`Signed ${signedTransactions.length} transactions with external wallet`);
+        }
+        
+        // Send each transaction
+        const signatures = [];
+        for (let i = 0; i < signedTransactions.length; i++) {
+            const signedTx = signedTransactions[i];
+            
+            console.log(`Sending transaction ${i + 1}/${signedTransactions.length}`);
+            const signature = await this.connection.sendRawTransaction(signedTx.serialize(), {
+                skipPreflight: options.skipPreflight || false,
+                preflightCommitment: 'processed',
+                maxRetries: this.maxRetries
+            });
+            
+            signatures.push(signature);
+            console.log(`Transaction ${i + 1} sent:`, signature);
+            
+            // Small delay between transactions
+            if (i < signedTransactions.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+        
+        // Wait for all confirmations
+        const confirmationPromises = signatures.map(signature => 
+            this.connection.confirmTransaction({
+                signature,
+                blockhash,
+                lastValidBlockHeight
+            })
+        );
+        
+        const confirmations = await Promise.all(confirmationPromises);
+        
+        // Check for failed transactions
+        const failedTxs = confirmations.filter(conf => conf.value.err);
+        if (failedTxs.length > 0) {
+            console.warn(`${failedTxs.length} transactions failed`);
+        }
+        
+        return { 
+            signatures, 
+            success: true,
+            failedCount: failedTxs.length
+        };
+    }
+    
+    /**
+     * Deserialize a transaction string
+     * @param {string} txString - Transaction string in base64 or base58
+     * @returns {Object} Deserialized transaction
+     * @private
+     */
+    _deserializeTransaction(txString) {
+        let transactionBuf;
+        
+        // Detect encoding and create buffer
+        if (this._isBase58(txString)) {
+            console.log('Detected base58 encoding');
+            if (typeof window.bs58 !== 'undefined') {
+                transactionBuf = Buffer.from(window.bs58.decode(txString));
+            } else {
+                throw new Error('bs58 library not loaded');
+            }
+        } else {
+            console.log('Using base64 encoding');
+            transactionBuf = Buffer.from(txString, 'base64');
+        }
+        
+        console.log('Buffer length:', transactionBuf.length);
+        
+        // Try to deserialize as versioned transaction first
+        try {
+            if (window.solanaWeb3?.VersionedTransaction) {
+                const txObject = window.solanaWeb3.VersionedTransaction.deserialize(transactionBuf);
+                console.log('Deserialized as Versioned Transaction');
+                return txObject;
+            }
+        } catch (versionedError) {
+            console.log('Versioned transaction error:', versionedError);
+        }
+        
+        // Fallback to legacy transaction
+        try {
+            if (window.solanaWeb3?.Transaction) {
+                const txObject = window.solanaWeb3.Transaction.from(transactionBuf);
+                console.log('Deserialized as Legacy Transaction');
+                return txObject;
+            } else {
+                throw new Error('Solana Transaction class not available');
+            }
+        } catch (legacyError) {
+            console.log('Legacy transaction error:', legacyError);
+            throw new Error('Failed to deserialize transaction');
+        }
+    }
+    
+    /**
+     * Update transaction blockhash
+     * @param {Object} txObject - Transaction object
+     * @param {string} blockhash - New blockhash
+     * @private
+     */
+    _updateBlockhash(txObject, blockhash) {
+        if ('recentBlockhash' in txObject) {
+            txObject.recentBlockhash = blockhash;
+        } else if ('message' in txObject && 'recentBlockhash' in txObject.message) {
+            txObject.message.recentBlockhash = blockhash;
+        }
+    }
+    
+    /**
+     * Check if string is base58 encoded
+     * @param {string} str - String to check
+     * @returns {boolean} True if base58
+     * @private
+     */
+    _isBase58(str) {
+        try {
+            if (typeof window.bs58 !== 'undefined') {
+                window.bs58.decode(str);
+                return true;
+            }
+            return false;
+        } catch {
+            return false;
+        }
+    }
+    
+    /**
+     * Add event listener
+     * @param {string} event - Event name ('connect', 'disconnect', 'accountChanged')
+     * @param {Function} callback - Callback function
+     */
+    addEventListener(event, callback) {
+        if (this.eventListeners[event]) {
+            this.eventListeners[event].push(callback);
+        }
+    }
+    
+    /**
+     * Remove event listener
+     * @param {string} event - Event name
+     * @param {Function} callback - Callback function to remove
+     */
+    removeEventListener(event, callback) {
+        if (this.eventListeners[event]) {
+            const index = this.eventListeners[event].indexOf(callback);
+            if (index > -1) {
+                this.eventListeners[event].splice(index, 1);
+            }
+        }
+    }
+    
+    /**
+     * Create a new local wallet with generated keypair
+     * @param {string} password - Password to encrypt the private key (optional)
+     * @returns {Promise<Object>} Wallet creation result with public key
+     */
+    async createLocalWallet(password = null) {
+        try {
+            if (!window.solanaWeb3?.Keypair) {
+                throw new Error('Solana Web3 not loaded. Please wait for initialization.');
+            }
+            
+            // Generate new keypair
+            const keypair = window.solanaWeb3.Keypair.generate();
+            
+            // Store wallet data
+            this.localWallet.keypair = keypair;
+            this.localWallet.publicKey = keypair.publicKey;
+            this.localWallet.privateKey = keypair.secretKey;
+            this.localWallet.isLocal = true;
+            
+            // Set main wallet properties
+            this.publicKey = keypair.publicKey;
+            this.isConnectedState = true;
+            this.walletType = 'local';
+            
+            // Save to storage (encrypted if password provided)
+            const walletData = {
+                publicKey: keypair.publicKey.toString(),
+                privateKey: Array.from(keypair.secretKey),
+                created: Date.now()
+            };
+            
+            if (password) {
+                walletData.encrypted = true;
+                walletData.privateKey = await this._encryptPrivateKey(walletData.privateKey, password);
+            }
+            
+            this.game.storage.set('localWallet', walletData);
+            
+            console.log('Local wallet created:', keypair.publicKey.toString());
+            this._handleConnect();
+            
+            return {
+                success: true,
+                publicKey: keypair.publicKey.toString(),
+                message: 'Local wallet created successfully'
+            };
+        } catch (error) {
+            console.error('Failed to create local wallet:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Load existing local wallet from storage
+     * @param {string} password - Password to decrypt the private key (if encrypted)
+     * @returns {Promise<boolean>} True if wallet loaded successfully
+     */
+    async loadLocalWallet(password = null) {
+        try {
+            // Check if Solana Web3 is available
+            if (!window.solanaWeb3?.Keypair) {
+                throw new Error('Solana Web3 not loaded. Please wait for initialization.');
+            }
+            
+            const walletData = this.game.storage.get('localWallet');
+            if (!walletData) {
+                return false;
+            }
+            
+            let privateKeyArray = walletData.privateKey;
+            
+            // Decrypt if password protected
+            if (walletData.encrypted && password) {
+                privateKeyArray = await this._decryptPrivateKey(walletData.privateKey, password);
+            } else if (walletData.encrypted && !password) {
+                throw new Error('Password required for encrypted wallet');
+            }
+            
+            // Restore keypair
+            const secretKey = new Uint8Array(privateKeyArray);
+            const keypair = window.solanaWeb3.Keypair.fromSecretKey(secretKey);
+            
+            // Set wallet data
+            this.localWallet.keypair = keypair;
+            this.localWallet.publicKey = keypair.publicKey;
+            this.localWallet.privateKey = keypair.secretKey;
+            this.localWallet.isLocal = true;
+            
+            // Set main wallet properties
+            this.publicKey = keypair.publicKey;
+            this.isConnectedState = true;
+            this.walletType = 'local';
+            
+            console.log('Local wallet loaded:', keypair.publicKey.toString());
+            this._handleConnect();
+            
+            return true;
+        } catch (error) {
+            console.error('Failed to load local wallet:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Import a local wallet from private key
+     * @param {string} privateKeyString - Private key as base58 string or byte array
+     * @param {string} password - Password to encrypt the wallet (optional)
+     * @returns {Promise<Object>} Import result
+     */
+    async importLocalWallet(privateKeyString, password = null) {
+        try {
+            // Check if Solana Web3 is available
+            if (!window.solanaWeb3?.Keypair) {
+                throw new Error('Solana Web3 not loaded. Please wait for initialization.');
+            }
+            
+            let secretKey;
+            
+            // Handle different private key formats
+            if (typeof privateKeyString === 'string') {
+                if (privateKeyString.includes('[') || privateKeyString.includes(',')) {
+                    // JSON array format [1,2,3,...]
+                    secretKey = new Uint8Array(JSON.parse(privateKeyString));
+                } else {
+                    // Base58 format
+                    if (window.bs58) {
+                        secretKey = window.bs58.decode(privateKeyString);
+                    } else {
+                        throw new Error('bs58 library not available for base58 decoding');
+                    }
+                }
+            } else if (Array.isArray(privateKeyString)) {
+                secretKey = new Uint8Array(privateKeyString);
+            } else {
+                throw new Error('Invalid private key format');
+            }
+            
+            // Create keypair from secret key
+            const keypair = window.solanaWeb3.Keypair.fromSecretKey(secretKey);
+            
+            // Store wallet data
+            this.localWallet.keypair = keypair;
+            this.localWallet.publicKey = keypair.publicKey;
+            this.localWallet.privateKey = keypair.secretKey;
+            this.localWallet.isLocal = true;
+            
+            // Set main wallet properties
+            this.publicKey = keypair.publicKey;
+            this.isConnectedState = true;
+            this.walletType = 'local';
+            
+            // Save to storage
+            const walletData = {
+                publicKey: keypair.publicKey.toString(),
+                privateKey: Array.from(keypair.secretKey),
+                imported: true,
+                created: Date.now()
+            };
+            
+            if (password) {
+                walletData.encrypted = true;
+                walletData.privateKey = await this._encryptPrivateKey(walletData.privateKey, password);
+            }
+            
+            this.game.storage.set('localWallet', walletData);
+            
+            console.log('Local wallet imported:', keypair.publicKey.toString());
+            this._handleConnect();
+            
+            return {
+                success: true,
+                publicKey: keypair.publicKey.toString(),
+                message: 'Wallet imported successfully'
+            };
+        } catch (error) {
+            console.error('Failed to import local wallet:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Export the local wallet private key
+     * @param {string} format - Export format ('base58', 'json', 'uint8array')
+     * @param {string} password - Password to verify access (if wallet is encrypted)
+     * @returns {Promise<string|Array>} Exported private key
+     */
+    async exportLocalWallet(format = 'base58', password = null) {
+        if (!this.localWallet.isLocal || !this.localWallet.keypair) {
+            throw new Error('No local wallet to export');
+        }
+        
+        const walletData = this.game.storage.get('localWallet');
+        if (walletData && walletData.encrypted && !password) {
+            throw new Error('Password required for encrypted wallet');
+        }
+        
+        try {
+            const secretKey = this.localWallet.keypair.secretKey;
+            
+            switch (format.toLowerCase()) {
+                case 'base58':
+                    if (!window.bs58) {
+                        throw new Error('bs58 library not available');
+                    }
+                    return window.bs58.encode(secretKey);
+                    
+                case 'json':
+                    return JSON.stringify(Array.from(secretKey));
+                    
+                case 'uint8array':
+                    return Array.from(secretKey);
+                    
+                default:
+                    throw new Error('Invalid export format. Use: base58, json, or uint8array');
+            }
+        } catch (error) {
+            console.error('Failed to export wallet:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Delete the local wallet from storage
+     * @param {string} password - Password to verify deletion (if encrypted)
+     * @returns {Promise<boolean>} True if deleted successfully
+     */
+    async deleteLocalWallet(password = null) {
+        try {
+            const walletData = this.game.storage.get('localWallet');
+            if (walletData && walletData.encrypted && !password) {
+                throw new Error('Password required to delete encrypted wallet');
+            }
+            
+            // Clear local wallet data
+            this.localWallet = {
+                keypair: null,
+                publicKey: null,
+                privateKey: null,
+                isLocal: false
+            };
+            
+            // Clear main wallet state
+            this.publicKey = null;
+            this.isConnectedState = false;
+            this.walletType = null;
+            
+            // Remove from storage
+            this.game.storage.remove('localWallet');
+            
+            console.log('Local wallet deleted');
+            this._handleDisconnect();
+            
+            return true;
+        } catch (error) {
+            console.error('Failed to delete local wallet:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Check if a local wallet exists in storage
+     * @returns {boolean} True if local wallet exists
+     */
+    hasLocalWallet() {
+        return this.game.storage.has('localWallet');
+    }
+    
+    /**
+     * Get local wallet info without loading it
+     * @returns {Object|null} Wallet info or null
+     */
+    getLocalWalletInfo() {
+        const walletData = this.game.storage.get('localWallet');
+        if (!walletData) return null;
+        
+        return {
+            publicKey: walletData.publicKey,
+            encrypted: walletData.encrypted || false,
+            imported: walletData.imported || false,
+            created: walletData.created || null
+        };
+    }
+    
+    /**
+     * Sign a message with local wallet
+     * @param {string} message - Message to sign
+     * @param {string} encoding - Message encoding
+     * @returns {Promise<string>} Base64 signature
+     * @private
+     */
+    async _signMessageWithLocalWallet(message, encoding = 'utf8') {
+        if (!this.localWallet.isLocal || !this.localWallet.keypair) {
+            throw new Error('No local wallet available');
+        }
+        
+        try {
+            const messageBytes = encoding === 'hex'
+                ? Buffer.from(message, 'hex')
+                : Buffer.from(message, 'utf8');
+            
+            // Use the keypair's secret key to sign the message
+            let signature;
+            
+            // Try different methods to sign the message
+            if (typeof window.nacl !== 'undefined' && window.nacl.sign) {
+                // Use nacl if available
+                signature = window.nacl.sign.detached(messageBytes, this.localWallet.keypair.secretKey);
+            } else if (this.localWallet.keypair.sign) {
+                // Use keypair's sign method if available
+                signature = this.localWallet.keypair.sign(messageBytes);
+            } else {
+                // Fallback: create a simple hash-based signature (not cryptographically secure, for demo only)
+                console.warn('Using fallback signing method - not cryptographically secure!');
+                const hash = this._simpleHash(messageBytes);
+                signature = new Uint8Array(64); // Standard signature length
+                hash.forEach((byte, index) => {
+                    if (index < 64) signature[index] = byte;
+                });
+            }
+            
+            return Buffer.from(signature).toString('base64');
+        } catch (error) {
+            console.error('Failed to sign message with local wallet:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Simple hash function for fallback signing (demo purposes only)
+     * @param {Uint8Array} data - Data to hash
+     * @returns {Uint8Array} Hash bytes
+     * @private
+     */
+    _simpleHash(data) {
+        let hash = 0;
+        const result = new Uint8Array(32);
+        
+        for (let i = 0; i < data.length; i++) {
+            hash = ((hash << 5) - hash + data[i]) & 0xffffffff;
+        }
+        
+        // Generate 32 bytes from hash
+        for (let i = 0; i < 32; i++) {
+            result[i] = (hash >>> (i % 4 * 8)) & 0xff;
+            hash = ((hash * 31) + (data[i % data.length] || 0)) & 0xffffffff;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Sign transaction with local wallet
+     * @param {Object} transaction - Transaction object
+     * @returns {Object} Signed transaction
+     * @private
+     */
+    _signTransactionWithLocalWallet(transaction) {
+        if (!this.localWallet.isLocal || !this.localWallet.keypair) {
+            throw new Error('No local wallet available');
+        }
+        
+        try {
+            if ('sign' in transaction) {
+                transaction.sign(this.localWallet.keypair);
+            } else if ('partialSign' in transaction) {
+                transaction.partialSign(this.localWallet.keypair);
+            } else {
+                throw new Error('Invalid transaction object for signing');
+            }
+            
+            return transaction;
+        } catch (error) {
+            console.error('Failed to sign transaction with local wallet:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Simple encryption for private key storage (using XOR with password hash)
+     * Note: This is basic encryption. For production use, consider stronger encryption.
+     * @param {Array} privateKeyArray - Private key byte array
+     * @param {string} password - Password for encryption
+     * @returns {Promise<Array>} Encrypted private key
+     * @private
+     */
+    async _encryptPrivateKey(privateKeyArray, password) {
+        // Simple XOR encryption (basic security)
+        const passwordHash = this._hashString(password);
+        const encrypted = privateKeyArray.map((byte, index) => {
+            return byte ^ passwordHash[index % passwordHash.length];
+        });
+        return encrypted;
+    }
+    
+    /**
+     * Decrypt private key
+     * @param {Array} encryptedKey - Encrypted private key
+     * @param {string} password - Decryption password
+     * @returns {Promise<Array>} Decrypted private key array
+     * @private
+     */
+    async _decryptPrivateKey(encryptedKey, password) {
+        // XOR decryption (same as encryption with XOR)
+        const passwordHash = this._hashString(password);
+        const decrypted = encryptedKey.map((byte, index) => {
+            return byte ^ passwordHash[index % passwordHash.length];
+        });
+        return decrypted;
+    }
+    
+    /**
+     * Simple hash function for password
+     * @param {string} str - String to hash
+     * @returns {Array} Hash byte array
+     * @private
+     */
+    _hashString(str) {
+        let hash = 0;
+        const result = [];
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash + str.charCodeAt(i)) & 0xffffffff;
+        }
+        
+        // Generate 32 bytes from hash
+        for (let i = 0; i < 32; i++) {
+            result.push((hash >>> (i % 4 * 8)) & 0xff);
+            hash = ((hash * 9) + str.charCodeAt(i % str.length)) & 0xffffffff;
+        }
+        return result;
+    }
+    
+    /**
+     * Get wallet connection status and info
+     * @returns {Object} Wallet status information
+     */
+    getStatus() {
+        return {
+            isConnected: this.isConnected(),
+            publicKey: this.getPublicKey(),
+            walletType: this.walletType,
+            isLocal: this.walletType === 'local',  // Use walletType to determine if local
+            hasLocalWallet: this.hasLocalWallet(),
+            provider: this.provider ? 'detected' : 'none',
+            connectionEndpoint: this.connection?.rpcEndpoint || null
+        };
+    }
+}
+
+/**
+ * GameObject - Base class for all objects in the hierarchy system
+ * Provides transform, parent-child relationships, and component management
+ * 
+ * Features:
+ * - Hierarchical parent-child relationships
+ * - Local and world transforms
+ * - Component-based architecture
+ * - Automatic propagation of updates through hierarchy
+ * - Layer-based rendering order
+ * 
+ * @example
+ * // Create a game object hierarchy
+ * const player = new ProofCanvas.GameObject('player');
+ * const weapon = new ProofCanvas.GameObject('weapon');
+ * player.addChild(weapon);
+ * 
+ * // Set transforms
+ * player.setPosition(100, 200);
+ * weapon.setLocalPosition(20, 0); // Relative to player
+ * 
+ * // Add components
+ * player.addComponent('sprite', spriteComponent);
+ * player.addComponent('collider', colliderComponent);
+ */
+class GameObject {
+    constructor(name = 'GameObject') {
+        this.name = name;
+        this.id = GameObject._nextId++;
+        this.active = true;
+        this.visible = true;
+        
+        // Transform properties
+        this.localPosition = { x: 0, y: 0 };
+        this.localRotation = 0;
+        this.localScale = { x: 1, y: 1 };
+        
+        // World transform (calculated from hierarchy)
+        this.worldPosition = { x: 0, y: 0 };
+        this.worldRotation = 0;
+        this.worldScale = { x: 1, y: 1 };
+        
+        // Hierarchy
+        this.parent = null;
+        this.children = [];
+        
+        // Components
+        this.components = new Map();
+        
+        // Rendering
+        this.layer = 0; // Rendering layer (higher = on top)
+        this.alpha = 1;
+        this.tint = null;
+        
+        // Tags for grouping
+        this.tags = new Set();
+        
+        // Custom user data
+        this.userData = {};
+        
+        // Lifecycle flags
+        this._isDestroyed = false;
+        this._isDirty = true; // Needs transform update
+    }
+    
+    // Static ID counter
+    static _nextId = 1;
+    
+    /**
+     * Set local position
+     * @param {number} x - X position
+     * @param {number} y - Y position
+     */
+    setLocalPosition(x, y) {
+        this.localPosition.x = x;
+        this.localPosition.y = y;
+        this.markDirty();
+        return this;
+    }
+    
+    /**
+     * Set world position (updates local position based on parent)
+     * @param {number} x - World X position
+     * @param {number} y - World Y position
+     */
+    setPosition(x, y) {
+        if (this.parent) {
+            // Convert world to local coordinates
+            const parentWorld = this.parent.worldPosition;
+            const parentRotation = this.parent.worldRotation;
+            const parentScale = this.parent.worldScale;
+            
+            // Inverse transform
+            const dx = x - parentWorld.x;
+            const dy = y - parentWorld.y;
+            
+            // Inverse rotation
+            const cos = Math.cos(-parentRotation);
+            const sin = Math.sin(-parentRotation);
+            const localX = (dx * cos - dy * sin) / parentScale.x;
+            const localY = (dx * sin + dy * cos) / parentScale.y;
+            
+            this.setLocalPosition(localX, localY);
+        } else {
+            this.setLocalPosition(x, y);
+        }
+        return this;
+    }
+    
+    /**
+     * Set local rotation
+     * @param {number} rotation - Rotation in radians
+     */
+    setLocalRotation(rotation) {
+        this.localRotation = rotation;
+        this.markDirty();
+        return this;
+    }
+    
+    /**
+     * Set local scale
+     * @param {number} x - X scale
+     * @param {number} y - Y scale (optional, defaults to x)
+     */
+    setLocalScale(x, y = x) {
+        this.localScale.x = x;
+        this.localScale.y = y;
+        this.markDirty();
+        return this;
+    }
+    
+    /**
+     * Mark this object and all children as needing transform update
+     */
+    markDirty() {
+        this._isDirty = true;
+        this.children.forEach(child => child.markDirty());
+    }
+    
+    /**
+     * Update world transform from local transform and parent
+     */
+    updateWorldTransform() {
+        if (!this._isDirty) return;
+        
+        if (this.parent) {
+            // Make sure parent is updated first
+            if (this.parent._isDirty) {
+                this.parent.updateWorldTransform();
+            }
+            
+            const parentWorld = this.parent.worldPosition;
+            const parentRotation = this.parent.worldRotation;
+            const parentScale = this.parent.worldScale;
+            
+            // Calculate world scale
+            this.worldScale.x = this.localScale.x * parentScale.x;
+            this.worldScale.y = this.localScale.y * parentScale.y;
+            
+            // Calculate world rotation
+            this.worldRotation = this.localRotation + parentRotation;
+            
+            // Calculate world position
+            const cos = Math.cos(parentRotation);
+            const sin = Math.sin(parentRotation);
+            const scaledX = this.localPosition.x * parentScale.x;
+            const scaledY = this.localPosition.y * parentScale.y;
+            
+            this.worldPosition.x = parentWorld.x + (scaledX * cos - scaledY * sin);
+            this.worldPosition.y = parentWorld.y + (scaledX * sin + scaledY * cos);
+        } else {
+            // No parent, world transform equals local transform
+            this.worldPosition.x = this.localPosition.x;
+            this.worldPosition.y = this.localPosition.y;
+            this.worldRotation = this.localRotation;
+            this.worldScale.x = this.localScale.x;
+            this.worldScale.y = this.localScale.y;
+        }
+        
+        this._isDirty = false;
+    }
+    
+    /**
+     * Add a child GameObject
+     * @param {GameObject} child - Child to add
+     */
+    addChild(child) {
+        if (child.parent) {
+            child.parent.removeChild(child);
+        }
+        
+        child.parent = this;
+        this.children.push(child);
+        child.markDirty();
+        
+        return this;
+    }
+    
+    /**
+     * Remove a child GameObject
+     * @param {GameObject} child - Child to remove
+     */
+    removeChild(child) {
+        const index = this.children.indexOf(child);
+        if (index !== -1) {
+            this.children.splice(index, 1);
+            child.parent = null;
+            child.markDirty();
+        }
+        return this;
+    }
+    
+    /**
+     * Remove this GameObject from its parent
+     */
+    removeFromParent() {
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+        return this;
+    }
+    
+    /**
+     * Get all children recursively
+     * @returns {Array<GameObject>} All descendants
+     */
+    getAllDescendants() {
+        const descendants = [];
+        const traverse = (obj) => {
+            obj.children.forEach(child => {
+                descendants.push(child);
+                traverse(child);
+            });
+        };
+        traverse(this);
+        return descendants;
+    }
+    
+    /**
+     * Find child by name (recursive)
+     * @param {string} name - Name to search for
+     * @returns {GameObject|null} Found object or null
+     */
+    findChildByName(name) {
+        if (this.name === name) return this;
+        
+        for (const child of this.children) {
+            const found = child.findChildByName(name);
+            if (found) return found;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Find all objects with tag (recursive)
+     * @param {string} tag - Tag to search for
+     * @returns {Array<GameObject>} Objects with tag
+     */
+    findChildrenByTag(tag) {
+        const results = [];
+        
+        const traverse = (obj) => {
+            if (obj.tags.has(tag)) {
+                results.push(obj);
+            }
+            obj.children.forEach(child => traverse(child));
+        };
+        
+        traverse(this);
+        return results;
+    }
+    
+    /**
+     * Add a tag
+     * @param {string} tag - Tag to add
+     */
+    addTag(tag) {
+        this.tags.add(tag);
+        return this;
+    }
+    
+    /**
+     * Remove a tag
+     * @param {string} tag - Tag to remove
+     */
+    removeTag(tag) {
+        this.tags.delete(tag);
+        return this;
+    }
+    
+    /**
+     * Check if has tag
+     * @param {string} tag - Tag to check
+     * @returns {boolean} Has tag
+     */
+    hasTag(tag) {
+        return this.tags.has(tag);
+    }
+    
+    /**
+     * Add a component
+     * @param {string} name - Component name
+     * @param {Object} component - Component instance
+     */
+    addComponent(name, component) {
+        this.components.set(name, component);
+        
+        // Set reference to this GameObject
+        if (component && typeof component === 'object') {
+            component.gameObject = this;
+            
+            // Call onAttach if it exists
+            if (typeof component.onAttach === 'function') {
+                component.onAttach(this);
+            }
+        }
+        
+        return this;
+    }
+    
+    /**
+     * Get a component
+     * @param {string} name - Component name
+     * @returns {Object|null} Component or null
+     */
+    getComponent(name) {
+        return this.components.get(name) || null;
+    }
+    
+    /**
+     * Remove a component
+     * @param {string} name - Component name
+     */
+    removeComponent(name) {
+        const component = this.components.get(name);
+        
+        if (component) {
+            // Call onDetach if it exists
+            if (typeof component.onDetach === 'function') {
+                component.onDetach(this);
+            }
+            
+            this.components.delete(name);
+        }
+        
+        return this;
+    }
+    
+    /**
+     * Update this object and all children
+     * @param {number} deltaTime - Time since last frame
+     */
+    update(deltaTime) {
+        if (!this.active) return;
+        
+        // Update components
+        this.components.forEach(component => {
+            if (component && typeof component.update === 'function') {
+                component.update(deltaTime);
+            }
+        });
+        
+        // Update children
+        this.children.forEach(child => {
+            child.update(deltaTime);
+        });
+    }
+    
+    /**
+     * Render this object and all children
+     * @param {Renderer} renderer - Renderer instance
+     */
+    render(renderer) {
+        if (!this.visible) return;
+        
+        // Update world transform if needed
+        this.updateWorldTransform();
+        
+        // Apply transform to renderer
+        renderer.ctx.save();
+        
+        // Apply world transform
+        renderer.ctx.translate(this.worldPosition.x, this.worldPosition.y);
+        renderer.ctx.rotate(this.worldRotation);
+        renderer.ctx.scale(this.worldScale.x, this.worldScale.y);
+        
+        // Apply alpha
+        if (this.alpha !== 1) {
+            renderer.ctx.globalAlpha *= this.alpha;
+        }
+        
+        // Render components
+        this.components.forEach(component => {
+            if (component && typeof component.render === 'function') {
+                component.render(renderer);
+            }
+        });
+        
+        // Render children (already sorted by layer in SceneManager)
+        this.children.forEach(child => {
+            child.render(renderer);
+        });
+        
+        renderer.ctx.restore();
+    }
+    
+    /**
+     * Destroy this object and all children
+     */
+    destroy() {
+        if (this._isDestroyed) return;
+        
+        // Destroy all children
+        [...this.children].forEach(child => child.destroy());
+        
+        // Remove from parent
+        this.removeFromParent();
+        
+        // Clean up components
+        this.components.forEach(component => {
+            if (component && typeof component.onDestroy === 'function') {
+                component.onDestroy();
+            }
+        });
+        this.components.clear();
+        
+        // Mark as destroyed
+        this._isDestroyed = true;
+    }
+    
+    /**
+     * Clone this GameObject (shallow clone, no children)
+     * @returns {GameObject} Cloned object
+     */
+    clone() {
+        const cloned = new GameObject(this.name + '_clone');
+        
+        // Copy transform
+        cloned.setLocalPosition(this.localPosition.x, this.localPosition.y);
+        cloned.setLocalRotation(this.localRotation);
+        cloned.setLocalScale(this.localScale.x, this.localScale.y);
+        
+        // Copy properties
+        cloned.active = this.active;
+        cloned.visible = this.visible;
+        cloned.layer = this.layer;
+        cloned.alpha = this.alpha;
+        cloned.tint = this.tint;
+        
+        // Copy tags
+        this.tags.forEach(tag => cloned.addTag(tag));
+        
+        // Clone userData (shallow copy)
+        cloned.userData = { ...this.userData };
+        
+        return cloned;
+    }
+}
+
+/**
+ * SceneManager - Manages the hierarchical scene graph
+ * Provides scene organization, layer sorting, and efficient rendering
+ * 
+ * Features:
+ * - Root scene node management
+ * - Automatic layer-based sorting
+ * - Efficient dirty flag propagation
+ * - Scene queries and searches
+ * - Integration with particle systems and UI
+ * 
+ * @example
+ * // Create scene manager
+ * const scene = game.sceneManager;
+ * 
+ * // Create game objects
+ * const world = scene.createGameObject('world');
+ * const player = scene.createGameObject('player', world);
+ * const enemy = scene.createGameObject('enemy', world);
+ * 
+ * // Create UI overlay
+ * const ui = scene.createGameObject('ui');
+ * ui.layer = 100; // UI on top
+ * 
+ * // Add particle emitter as child
+ * const particleContainer = scene.createGameObject('particles');
+ * particleContainer.addComponent('emitter', particleEmitter);
+ */
+class SceneManager {
+    constructor(game) {
+        this.game = game;
+        
+        // Root of the scene graph
+        this.root = new GameObject('SceneRoot');
+        
+        // Quick access maps
+        this.gameObjects = new Map(); // ID -> GameObject
+        this.namedObjects = new Map(); // Name -> GameObject[]
+        
+        // Rendering lists (cached and sorted by layer)
+        this.renderList = [];
+        this.renderListDirty = true;
+        
+        // Scene states
+        this.isPaused = false;
+        
+        // Statistics
+        this.stats = {
+            objectCount: 0,
+            componentCount: 0,
+            updateTime: 0,
+            renderTime: 0
+        };
+    }
+    
+    /**
+     * Create a new GameObject and add to scene
+     * @param {string} name - Object name
+     * @param {GameObject} parent - Parent object (optional, defaults to root)
+     * @returns {GameObject} Created object
+     */
+    createGameObject(name = 'GameObject', parent = null) {
+        const obj = new GameObject(name);
+        
+        // Add to scene
+        if (parent) {
+            parent.addChild(obj);
+        } else {
+            this.root.addChild(obj);
+        }
+        
+        // Register in maps
+        this.gameObjects.set(obj.id, obj);
+        
+        // Add to named objects map
+        if (!this.namedObjects.has(name)) {
+            this.namedObjects.set(name, []);
+        }
+        this.namedObjects.get(name).push(obj);
+        
+        // Mark render list as dirty
+        this.renderListDirty = true;
+        
+        this.stats.objectCount++;
+        
+        return obj;
+    }
+    
+    /**
+     * Remove GameObject from scene
+     * @param {GameObject} obj - Object to remove
+     */
+    removeGameObject(obj) {
+        if (!obj) return;
+        
+        // Remove from maps
+        this.gameObjects.delete(obj.id);
+        
+        // Remove from named objects
+        const named = this.namedObjects.get(obj.name);
+        if (named) {
+            const index = named.indexOf(obj);
+            if (index !== -1) {
+                named.splice(index, 1);
+            }
+            if (named.length === 0) {
+                this.namedObjects.delete(obj.name);
+            }
+        }
+        
+        // Destroy the object (removes from parent and destroys children)
+        obj.destroy();
+        
+        // Mark render list as dirty
+        this.renderListDirty = true;
+        
+        this.stats.objectCount--;
+    }
+    
+    /**
+     * Find GameObject by ID
+     * @param {number} id - Object ID
+     * @returns {GameObject|null} Found object or null
+     */
+    findById(id) {
+        return this.gameObjects.get(id) || null;
+    }
+    
+    /**
+     * Find GameObject by name
+     * @param {string} name - Object name
+     * @returns {GameObject|null} First object with name or null
+     */
+    findByName(name) {
+        const objects = this.namedObjects.get(name);
+        return objects && objects.length > 0 ? objects[0] : null;
+    }
+    
+    /**
+     * Find all GameObjects by name
+     * @param {string} name - Object name
+     * @returns {Array<GameObject>} All objects with name
+     */
+    findAllByName(name) {
+        return this.namedObjects.get(name) || [];
+    }
+    
+    /**
+     * Find all GameObjects with tag
+     * @param {string} tag - Tag to search for
+     * @returns {Array<GameObject>} Objects with tag
+     */
+    findByTag(tag) {
+        return this.root.findChildrenByTag(tag);
+    }
+    
+    /**
+     * Get all GameObjects in layer
+     * @param {number} layer - Layer number
+     * @returns {Array<GameObject>} Objects in layer
+     */
+    getObjectsInLayer(layer) {
+        const objects = [];
+        
+        const traverse = (obj) => {
+            if (obj.layer === layer) {
+                objects.push(obj);
+            }
+            obj.children.forEach(child => traverse(child));
+        };
+        
+        traverse(this.root);
+        return objects;
+    }
+    
+    /**
+     * Update render list (sort by layer)
+     * @private
+     */
+    _updateRenderList() {
+        if (!this.renderListDirty) return;
+        
+        this.renderList = [];
+        
+        // Collect all visible objects
+        const collect = (obj) => {
+            if (obj.visible && obj !== this.root) {
+                this.renderList.push(obj);
+            }
+            obj.children.forEach(child => collect(child));
+        };
+        
+        collect(this.root);
+        
+        // Sort by layer (stable sort)
+        this.renderList.sort((a, b) => a.layer - b.layer);
+        
+        this.renderListDirty = false;
+    }
+    
+    /**
+     * Update all objects in scene
+     * @param {number} deltaTime - Time since last frame
+     */
+    update(deltaTime) {
+        if (this.isPaused) return;
+        
+        const startTime = performance.now();
+        
+        // Update from root (propagates to all children)
+        this.root.update(deltaTime);
+        
+        this.stats.updateTime = performance.now() - startTime;
+    }
+    
+    /**
+     * Render all objects in scene
+     * @param {Renderer} renderer - Renderer instance
+     */
+    render(renderer) {
+        const startTime = performance.now();
+        
+        // Update render list if needed
+        this._updateRenderList();
+        
+        // Render all objects in layer order
+        this.renderList.forEach(obj => {
+            obj.render(renderer);
+        });
+        
+        this.stats.renderTime = performance.now() - startTime;
+    }
+    
+    /**
+     * Clear the entire scene
+     */
+    clear() {
+        // Destroy all children of root
+        [...this.root.children].forEach(child => {
+            this.removeGameObject(child);
+        });
+        
+        // Clear maps
+        this.gameObjects.clear();
+        this.namedObjects.clear();
+        this.renderList = [];
+        this.renderListDirty = true;
+        
+        this.stats.objectCount = 0;
+        this.stats.componentCount = 0;
+    }
+    
+    /**
+     * Get scene statistics
+     * @returns {Object} Scene stats
+     */
+    getStats() {
+        return {
+            ...this.stats,
+            visibleObjects: this.renderList.length
+        };
+    }
+    
+    /**
+     * Pause scene updates
+     */
+    pause() {
+        this.isPaused = true;
+    }
+    
+    /**
+     * Resume scene updates
+     */
+    resume() {
+        this.isPaused = false;
+    }
+    
+    /**
+     * Create a group GameObject for organizing
+     * @param {string} name - Group name
+     * @param {GameObject} parent - Parent object
+     * @returns {GameObject} Group object
+     */
+    createGroup(name = 'Group', parent = null) {
+        const group = this.createGameObject(name, parent);
+        group.addTag('group');
+        return group;
+    }
+    
+    /**
+     * Integrate particle emitter into hierarchy
+     * @param {Object} emitter - Particle emitter
+     * @param {GameObject} parent - Parent object
+     * @returns {GameObject} Container object with emitter
+     */
+    addParticleEmitter(emitter, parent = null) {
+        const container = this.createGameObject('ParticleEmitter', parent);
+        container.addTag('particles');
+        
+        // Create wrapper component for the emitter
+        const emitterComponent = {
+            emitter: emitter,
+            update: function(deltaTime) {
+                // Emitter updates are handled by ParticleSystem
+            },
+            render: function(renderer) {
+                // Particles are rendered by ParticleSystem
+                // This is just for positioning
+            },
+            onDestroy: function() {
+                // Remove emitter when GameObject is destroyed
+                if (this.gameObject && this.gameObject.game) {
+                    this.gameObject.game.particleSystem.removeEmitter(this.emitter);
+                }
+            }
+        };
+        
+        container.addComponent('particleEmitter', emitterComponent);
+        
+        // Update emitter position when container moves
+        const originalUpdate = container.update.bind(container);
+        container.update = function(deltaTime) {
+            originalUpdate(deltaTime);
+            
+            // Update emitter position to match world position
+            container.updateWorldTransform();
+            emitter.x = container.worldPosition.x;
+            emitter.y = container.worldPosition.y;
+        };
+        
+        return container;
+    }
+}
+
+/**
+ * Component Examples - Common components for GameObjects
+ */
+
+/**
+ * SpriteComponent - Renders a sprite
+ */
+class SpriteComponent {
+    constructor(spritesheet, spriteName, options = {}) {
+        this.spritesheet = spritesheet;
+        this.spriteName = spriteName;
+        this.options = options;
+        this.gameObject = null;
+    }
+    
+    render(renderer) {
+        if (this.spritesheet && this.spriteName) {
+            // Position is already set by GameObject's transform
+            renderer.drawSprite(this.spritesheet, this.spriteName, 0, 0, this.options);
+        }
+    }
+}
+
+/**
+ * AnimationComponent - Handles sprite animations
+ */
+class AnimationComponent {
+    constructor(animationPlayer) {
+        this.player = animationPlayer;
+        this.gameObject = null;
+    }
+    
+    update(deltaTime) {
+        if (this.player) {
+            this.player.update(deltaTime);
+        }
+    }
+    
+    render(renderer) {
+        if (this.player) {
+            renderer.drawAnimationPlayer(this.player, 0, 0);
+        }
+    }
+    
+    play(animationName) {
+        if (this.player) {
+            this.player.play(animationName);
+        }
+    }
+}
+
+/**
+ * TextComponent - Renders text
+ */
+class TextComponent {
+    constructor(text = '', options = {}) {
+        this.text = text;
+        this.options = {
+            font: '16px Arial',
+            color: 'white',
+            align: 'center',
+            baseline: 'middle',
+            ...options
+        };
+        this.gameObject = null;
+    }
+    
+    render(renderer) {
+        renderer.drawText(this.text, 0, 0, this.options);
+    }
+}
+
+/**
+ * CircleColliderComponent - Simple circle collision detection
+ */
+class CircleColliderComponent {
+    constructor(radius = 10) {
+        this.radius = radius;
+        this.gameObject = null;
+        this.isColliding = false;
+        this.collidingWith = new Set();
+    }
+    
+    checkCollision(other) {
+        if (!this.gameObject || !other.gameObject) return false;
+        
+        const pos1 = this.gameObject.worldPosition;
+        const pos2 = other.gameObject.worldPosition;
+        
+        const dx = pos2.x - pos1.x;
+        const dy = pos2.y - pos1.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        return distance < (this.radius + other.radius);
+    }
+    
+    render(renderer) {
+        // Debug render collider
+        if (window.DEBUG_COLLIDERS) {
+            renderer.ctx.strokeStyle = this.isColliding ? 'red' : 'green';
+            renderer.ctx.lineWidth = 1;
+            renderer.ctx.beginPath();
+            renderer.ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            renderer.ctx.stroke();
+        }
     }
 }
 
@@ -3783,7 +6892,69 @@ class ParticleSystem {
         this.game = game;
         this.emitters = [];
         this.particles = [];
-        this.maxParticles = 10000;
+        this.maxParticles = 2000; // Reduced from 10000
+        
+        // Object pooling for particles
+        this.particlePool = [];
+        this.poolSize = 500; // Reduced from 1000
+        this._initializePool();
+        
+        // Three.js instanced rendering setup
+        this.instancedMesh = null;
+        this.instanceMatrix = null;
+        this.instanceColor = null;
+        this.maxInstances = 1000; // Reduced from 5000
+        this.activeInstances = 0;
+        this.needsInstanceUpdate = false;
+        
+        // Update frequency control
+        this.updateAccumulator = 0;
+        this.updateInterval = 1/30; // Update particles at 30fps
+        
+        this._initializeInstancedMesh();
+    }
+    
+    /**
+     * Initialize particle object pool
+     * @private
+     */
+    _initializePool() {
+        for (let i = 0; i < this.poolSize; i++) {
+            this.particlePool.push(new Particle(0, 0, 0, 0, {}));
+        }
+    }
+    
+    /**
+     * Get a particle from the pool or create new one
+     * @private
+     */
+    _getPooledParticle() {
+        if (this.particlePool.length > 0) {
+            return this.particlePool.pop();
+        }
+        return new Particle(0, 0, 0, 0, {});
+    }
+    
+    /**
+     * Return a particle to the pool
+     * @private
+     */
+    _returnToPool(particle) {
+        if (this.particlePool.length < this.poolSize) {
+            // Reset particle state
+            particle.life = 0;
+            particle.x = 0;
+            particle.y = 0;
+            this.particlePool.push(particle);
+        }
+    }
+    
+    /**
+     * Initialize the particle system (2D only)
+     * @private
+     */
+    _initializeInstancedMesh() {
+        // Three.js support has been removed
     }
 
     /**
@@ -3822,17 +6993,36 @@ class ParticleSystem {
      * @param {number} deltaTime - Time since last frame
      */
     update(deltaTime) {
-        // Update emitters
+        // Always update emitters (they control particle creation)
         this.emitters.forEach(emitter => emitter.update(deltaTime));
         
-        // Update particles
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const particle = this.particles[i];
-            particle.update(deltaTime);
+        // Update particles at reduced frequency
+        this.updateAccumulator += deltaTime;
+        if (this.updateAccumulator >= this.updateInterval) {
+            const actualDelta = this.updateAccumulator;
             
-            if (particle.life <= 0) {
-                this.particles.splice(i, 1);
+            // Update particles in batches to spread load
+            const batchSize = Math.min(50, this.particles.length);
+            const startIndex = Math.floor(Math.random() * Math.max(1, this.particles.length - batchSize));
+            
+            for (let i = startIndex + batchSize - 1; i >= startIndex && i < this.particles.length; i--) {
+                if (i >= 0 && i < this.particles.length) {
+                    const particle = this.particles[i];
+                    particle.update(actualDelta);
+                    
+                    if (particle.life <= 0) {
+                        // Clean up Three.js resources if needed
+                        if (particle.destroy && this.game.renderer) {
+                            particle.destroy(this.game.renderer);
+                        }
+                        // Return to pool instead of creating garbage
+                        this._returnToPool(particle);
+                        this.particles.splice(i, 1);
+                    }
+                }
             }
+            
+            this.updateAccumulator = 0;
         }
     }
 
@@ -3841,8 +7031,12 @@ class ParticleSystem {
      * @param {Renderer} renderer - Renderer instance
      */
     render(renderer) {
-        this.particles.forEach(particle => particle.render(renderer));
+        // 2D Canvas rendering - use individual particle rendering
+        if (renderer.ctx) {
+            this.particles.forEach(particle => particle.render(renderer));
+        }
     }
+    
 
     /**
      * Add a particle to the system
@@ -3860,6 +7054,27 @@ class ParticleSystem {
     clear() {
         this.particles.length = 0;
         this.emitters.length = 0;
+        
+        // Reset instanced mesh
+        if (this.instancedMesh) {
+            this.instancedMesh.count = 0;
+            this.activeInstances = 0;
+        }
+    }
+    
+    /**
+     * Destroy the particle system and clean up resources
+     */
+    destroy() {
+        this.clear();
+        
+        // Dispose of instanced mesh resources
+        if (this.instancedMesh) {
+            this.game.renderer.scene.remove(this.instancedMesh);
+            this.instancedMesh.geometry.dispose();
+            this.instancedMesh.material.dispose();
+            this.instancedMesh = null;
+        }
     }
 }
 
@@ -3886,6 +7101,8 @@ class ParticleEmitter {
             spawnShape: 'point', // 'point', 'circle', 'rectangle', 'square', 'triangle', 'line'
             spawnArea: { width: 50, height: 50, radius: 25 }, // Dimensions for shapes
             spawnEdgeOnly: false, // Only spawn on edges/perimeter of shapes
+            // Light configuration for particles
+            light: null, // Can be an object with light properties or a function that returns light config
             ...config
         };
         
@@ -3929,6 +7146,18 @@ class ParticleEmitter {
         const speed = this.config.velocity.min + 
                      Math.random() * (this.config.velocity.max - this.config.velocity.min);
         
+        // Determine light configuration for this particle
+        let lightConfig = null;
+        if (this.config.light) {
+            if (typeof this.config.light === 'function') {
+                // Light config is a function, call it to get dynamic config
+                lightConfig = this.config.light();
+            } else {
+                // Light config is an object, copy it
+                lightConfig = { ...this.config.light };
+            }
+        }
+        
         const particle = new Particle({
             x: spawnPos.x,
             y: spawnPos.y,
@@ -3942,7 +7171,8 @@ class ParticleEmitter {
             size: this.config.size.min + Math.random() * (this.config.size.max - this.config.size.min),
             gravity: { ...this.config.gravity },
             fadeOut: this.config.fadeOut,
-            shrink: this.config.shrink
+            shrink: this.config.shrink,
+            light: lightConfig
         });
         
         this.system.addParticle(particle);
@@ -4147,6 +7377,23 @@ class Particle {
         this.shrink = config.shrink || false;
         this.rotation = config.rotation || 0;
         this.angularVelocity = config.angularVelocity || 0;
+        
+        // Light attachment configuration
+        this.light = config.light || null;
+        if (this.light) {
+            // Set default light properties if not specified
+            this.light = {
+                enabled: this.light.enabled !== false,
+                radius: this.light.radius || this.size * 10,
+                intensity: this.light.intensity || 0.5,
+                color: this.light.color || this.color,
+                fadeWithLife: this.light.fadeWithLife !== false,
+                sizeWithParticle: this.light.sizeWithParticle !== false,
+                flicker: this.light.flicker || false,
+                flickerIntensity: this.light.flickerIntensity || 0.1,
+                castShadows: this.light.castShadows || false
+            };
+        }
     }
 
     /**
@@ -4180,6 +7427,40 @@ class Particle {
     }
 
     /**
+     * Attach a light to this particle
+     * @param {Object} lightConfig - Light configuration
+     */
+    attachLight(lightConfig) {
+        this.light = {
+            enabled: lightConfig.enabled !== false,
+            radius: lightConfig.radius || this.size * 10,
+            intensity: lightConfig.intensity || 0.5,
+            color: lightConfig.color || this.color,
+            fadeWithLife: lightConfig.fadeWithLife !== false,
+            sizeWithParticle: lightConfig.sizeWithParticle !== false,
+            flicker: lightConfig.flicker || false,
+            flickerIntensity: lightConfig.flickerIntensity || 0.1,
+            castShadows: lightConfig.castShadows || false
+        };
+    }
+
+    /**
+     * Detach light from this particle
+     */
+    detachLight() {
+        this.light = null;
+    }
+
+    /**
+     * Toggle light on/off
+     */
+    toggleLight() {
+        if (this.light) {
+            this.light.enabled = !this.light.enabled;
+        }
+    }
+
+    /**
      * Render the particle
      * @param {Renderer} renderer - Renderer instance
      */
@@ -4194,16 +7475,29 @@ class Particle {
                 rotation: this.rotation
             });
         } else {
-            // Light particle (circle)
-            const ctx = renderer.ctx;
-            ctx.save();
-            ctx.globalAlpha = this.color.a;
-            ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
+            // Light particle (circle) - handle both 2D and 3D renderers
+            if (renderer.ctx) {
+                // 2D Canvas renderer
+                const ctx = renderer.ctx;
+                ctx.save();
+                ctx.globalAlpha = this.color.a;
+                ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
         }
+    }
+    
+    /**
+     * Clean up particle resources (for instanced rendering, this is handled by the ParticleSystem)
+     */
+    destroy(renderer) {
+        // For instanced rendering, individual particles don't need cleanup
+        // The ParticleSystem manages the shared InstancedMesh
+        // Just mark this particle as destroyed
+        this.life = 0;
     }
 }
 
@@ -4867,15 +8161,31 @@ class EffectsManager {
      * @param {Renderer} renderer - Renderer instance
      */
     applyEffects(renderer) {
-        // Apply screen shake
-        if (this.shakeIntensity > 0) {
-            renderer.ctx.translate(this.shakeOffset.x, this.shakeOffset.y);
-        }
-        
-        // Apply zoom punch
-        if (this.zoomPunchIntensity > 0) {
-            const scale = 1 + this.zoomPunchIntensity;
-            renderer.ctx.scale(scale, scale);
+        if (renderer.ctx) {
+            // 2D Canvas renderer
+            // Apply screen shake
+            if (this.shakeIntensity > 0) {
+                renderer.ctx.translate(this.shakeOffset.x, this.shakeOffset.y);
+            }
+            
+            // Apply zoom punch
+            if (this.zoomPunchIntensity > 0) {
+                const scale = 1 + this.zoomPunchIntensity;
+                renderer.ctx.scale(scale, scale);
+            }
+        } else if (renderer.activeCamera) {
+            // Three.js renderer - apply effects to camera
+            if (this.shakeIntensity > 0) {
+                renderer.activeCamera.position.x += this.shakeOffset.x / 100;
+                renderer.activeCamera.position.y += this.shakeOffset.y / 100;
+            }
+            
+            // Zoom punch affects camera FOV for perspective camera
+            if (this.zoomPunchIntensity > 0 && renderer.activeCamera.isPerspectiveCamera) {
+                const baseFov = renderer.activeCamera.userData.baseFov || 75;
+                renderer.activeCamera.fov = baseFov * (1 + this.zoomPunchIntensity * 0.1);
+                renderer.activeCamera.updateProjectionMatrix();
+            }
         }
     }
     
@@ -4886,12 +8196,36 @@ class EffectsManager {
     applyPostEffects(renderer) {
         // Apply screen flash
         if (this.flashIntensity > 0) {
-            renderer.ctx.save();
-            renderer.ctx.globalCompositeOperation = 'screen';
-            renderer.ctx.globalAlpha = this.flashIntensity;
-            renderer.ctx.fillStyle = this.flashColor;
-            renderer.ctx.fillRect(0, 0, renderer.canvas.width, renderer.canvas.height);
-            renderer.ctx.restore();
+            if (renderer.ctx) {
+                // 2D Canvas renderer
+                renderer.ctx.save();
+                renderer.ctx.globalCompositeOperation = 'screen';
+                renderer.ctx.globalAlpha = this.flashIntensity;
+                renderer.ctx.fillStyle = this.flashColor;
+                renderer.ctx.fillRect(0, 0, renderer.canvas.width, renderer.canvas.height);
+                renderer.ctx.restore();
+            } else if (renderer.overlayCtx) {
+                // Three.js renderer with 2D overlay
+                renderer.overlayCtx.save();
+                renderer.overlayCtx.globalCompositeOperation = 'screen';
+                renderer.overlayCtx.globalAlpha = this.flashIntensity;
+                renderer.overlayCtx.fillStyle = this.flashColor;
+                renderer.overlayCtx.fillRect(0, 0, renderer.overlayCanvas.width, renderer.overlayCanvas.height);
+                renderer.overlayCtx.restore();
+                
+                // Make sure overlay is visible and positioned correctly
+                if (!renderer.overlayCanvas.parentNode) {
+                    renderer.overlayCanvas.style.position = 'absolute';
+                    renderer.overlayCanvas.style.top = '0';
+                    renderer.overlayCanvas.style.left = '0';
+                    renderer.overlayCanvas.style.pointerEvents = 'none';
+                    renderer.overlayCanvas.style.zIndex = '1000';
+                    renderer.canvas.parentNode.appendChild(renderer.overlayCanvas);
+                }
+            }
+        } else if (renderer.overlayCtx) {
+            // Clear overlay when no effects
+            renderer.overlayCtx.clearRect(0, 0, renderer.overlayCanvas.width, renderer.overlayCanvas.height);
         }
     }
 
@@ -4929,6 +8263,779 @@ class EffectsManager {
         this.flashDuration = 0;
         this.zoomPunchIntensity = 0;
         this.zoomPunchDuration = 0;
+    }
+}
+
+/**
+ * Advanced lighting system for dynamic 2D lighting and shadows
+ * Provides ambient lighting, point lights, spotlights, and area lights
+ * Integrates with particle system for glowing particles
+ */
+class LightingSystem {
+    constructor(game) {
+        this.game = game;
+        this.lights = [];
+        this.ambientLight = { r: 1.0, g: 1.0, b: 1.0, a: 1 }; // Full brightness ambient by default
+        this.enabled = true;
+        this.quality = 'high'; // 'low', 'medium', 'high', 'ultra'
+        
+        // Lighting buffers for performance
+        this.lightingCanvas = null;
+        this.lightingCtx = null;
+        this.shadowCanvas = null;
+        this.shadowCtx = null;
+        this.compositeCanvas = null;
+        this.compositeCtx = null;
+        
+        // Shadow casters for shadow mapping
+        this.shadowCasters = [];
+        
+        // Performance settings
+        this.maxLights = 50;
+        this.shadowsEnabled = true;
+        this.softShadows = true;
+        this.coloredLights = true;
+        
+        // Particle lighting integration
+        this.particleLights = [];
+        this.particleLightIntensity = 0.5;
+        
+        this._initializeBuffers();
+    }
+
+    /**
+     * Initialize lighting buffers
+     * @private
+     */
+    _initializeBuffers() {
+        const width = this.game.canvas.width;
+        const height = this.game.canvas.height;
+        
+        // Main lighting buffer
+        this.lightingCanvas = document.createElement('canvas');
+        this.lightingCanvas.width = width;
+        this.lightingCanvas.height = height;
+        this.lightingCtx = this.lightingCanvas.getContext('2d');
+        
+        // Shadow buffer
+        this.shadowCanvas = document.createElement('canvas');
+        this.shadowCanvas.width = width;
+        this.shadowCanvas.height = height;
+        this.shadowCtx = this.shadowCanvas.getContext('2d');
+        
+        // Composite buffer for final mixing
+        this.compositeCanvas = document.createElement('canvas');
+        this.compositeCanvas.width = width;
+        this.compositeCanvas.height = height;
+        this.compositeCtx = this.compositeCanvas.getContext('2d');
+    }
+
+    /**
+     * Create a new light source
+     * @param {Object} config - Light configuration
+     * @returns {Light} Created light
+     */
+    createLight(config) {
+        if (this.lights.length >= this.maxLights) {
+            console.warn('Maximum lights reached');
+            return null;
+        }
+        
+        const light = new Light(this, config);
+        this.lights.push(light);
+        return light;
+    }
+
+    /**
+     * Remove a light from the system
+     * @param {Light} light - Light to remove
+     */
+    removeLight(light) {
+        const index = this.lights.indexOf(light);
+        if (index > -1) {
+            this.lights.splice(index, 1);
+        }
+    }
+
+    /**
+     * Add a shadow caster
+     * @param {Object} caster - Shadow caster configuration
+     */
+    addShadowCaster(caster) {
+        this.shadowCasters.push({
+            type: caster.type || 'rectangle',
+            x: caster.x,
+            y: caster.y,
+            width: caster.width,
+            height: caster.height,
+            radius: caster.radius,
+            vertices: caster.vertices, // For polygon shadows
+            opacity: caster.opacity || 1.0
+        });
+    }
+
+    /**
+     * Clear all shadow casters
+     */
+    clearShadowCasters() {
+        this.shadowCasters.length = 0;
+    }
+
+    /**
+     * Set ambient light color
+     * @param {number} r - Red component (0-1)
+     * @param {number} g - Green component (0-1)
+     * @param {number} b - Blue component (0-1)
+     * @param {number} [a=1] - Alpha component (0-1)
+     */
+    setAmbientLight(r, g, b, a = 1) {
+        this.ambientLight = { r, g, b, a };
+    }
+
+    /**
+     * Create particle lights from active particles
+     * @param {ParticleSystem} particleSystem - Particle system to integrate
+     */
+    integrateParticles(particleSystem) {
+        if (!this.enabled) return;
+        
+        // Clear previous particle lights
+        this.particleLights.length = 0;
+        
+        // Process particles with attached lights
+        particleSystem.particles.forEach(particle => {
+            if (particle.life > 0) {
+                // Check if particle has light attachment
+                if (particle.light && particle.light.enabled) {
+                    const lifeRatio = particle.life / particle.maxLife;
+                    
+                    // Calculate light properties based on particle state
+                    let intensity = particle.light.intensity;
+                    let radius = particle.light.radius;
+                    
+                    // Fade light with particle life if enabled
+                    if (particle.light.fadeWithLife) {
+                        intensity *= lifeRatio;
+                    }
+                    
+                    // Scale light with particle size if enabled
+                    if (particle.light.sizeWithParticle) {
+                        const sizeRatio = particle.size / particle.initialSize;
+                        radius *= sizeRatio;
+                    }
+                    
+                    // Apply flicker if enabled
+                    if (particle.light.flicker) {
+                        const flickerOffset = (Math.random() - 0.5) * particle.light.flickerIntensity;
+                        intensity = Math.max(0, Math.min(1, intensity + flickerOffset));
+                    }
+                    
+                    this.particleLights.push({
+                        x: particle.x,
+                        y: particle.y,
+                        radius: radius,
+                        intensity: intensity,
+                        color: {
+                            r: (particle.light.color.r || particle.color.r) / 255,
+                            g: (particle.light.color.g || particle.color.g) / 255,
+                            b: (particle.light.color.b || particle.color.b) / 255
+                        },
+                        castShadows: particle.light.castShadows
+                    });
+                }
+                // Legacy support: also handle 'light' type particles without explicit light config
+                else if (particle.type === 'light') {
+                    const intensity = (particle.life / particle.maxLife) * 0.5;
+                    this.particleLights.push({
+                        x: particle.x,
+                        y: particle.y,
+                        radius: particle.size * 10 * this.particleLightIntensity,
+                        intensity: intensity,
+                        color: {
+                            r: particle.color.r / 255,
+                            g: particle.color.g / 255,
+                            b: particle.color.b / 255
+                        },
+                        castShadows: false
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Update lighting system
+     * @param {number} deltaTime - Time since last frame
+     */
+    update(deltaTime) {
+        if (!this.enabled) return;
+        
+        // Update dynamic lights
+        this.lights.forEach(light => light.update(deltaTime));
+        
+        // Integrate particle lights
+        if (this.game.particleSystem) {
+            this.integrateParticles(this.game.particleSystem);
+        }
+    }
+
+    /**
+     * Render lighting to the lighting buffer
+     * @param {Renderer} renderer - Main renderer
+     */
+    renderLighting(renderer) {
+        if (!this.enabled) return;
+        
+        const ctx = this.lightingCtx;
+        const width = this.lightingCanvas.width;
+        const height = this.lightingCanvas.height;
+        
+        // Clear lighting buffer to ambient color
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = `rgba(${Math.floor(this.ambientLight.r * 255)}, ${Math.floor(this.ambientLight.g * 255)}, ${Math.floor(this.ambientLight.b * 255)}, ${this.ambientLight.a})`;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Set additive blending for lights
+        ctx.globalCompositeOperation = 'lighter';
+        
+        // Render all lights
+        this.lights.forEach(light => {
+            if (light.enabled) {
+                this._renderLight(light, ctx);
+            }
+        });
+        
+        // Render particle lights
+        this.particleLights.forEach(light => {
+            this._renderParticleLight(light, ctx);
+        });
+        
+        // Apply shadows if enabled
+        if (this.shadowsEnabled && this.shadowCasters.length > 0) {
+            this._renderShadows();
+        }
+    }
+
+    /**
+     * Render individual light
+     * @param {Light} light - Light to render
+     * @param {CanvasRenderingContext2D} ctx - Context to render to
+     * @private
+     */
+    _renderLight(light, ctx) {
+        ctx.save();
+        
+        switch (light.type) {
+            case 'point':
+                this._renderPointLight(light, ctx);
+                break;
+            case 'spot':
+                this._renderSpotLight(light, ctx);
+                break;
+            case 'area':
+                this._renderAreaLight(light, ctx);
+                break;
+            case 'directional':
+                this._renderDirectionalLight(light, ctx);
+                break;
+        }
+        
+        ctx.restore();
+    }
+
+    /**
+     * Render point light with radial gradient
+     * @private
+     */
+    _renderPointLight(light, ctx) {
+        const gradient = ctx.createRadialGradient(
+            light.x, light.y, 0,
+            light.x, light.y, light.radius
+        );
+        
+        const color = light.getColor();
+        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity})`);
+        gradient.addColorStop(0.4, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity * 0.6})`);
+        gradient.addColorStop(0.7, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity * 0.3})`);
+        gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(
+            light.x - light.radius,
+            light.y - light.radius,
+            light.radius * 2,
+            light.radius * 2
+        );
+    }
+
+    /**
+     * Render spot light with cone shape
+     * @private
+     */
+    _renderSpotLight(light, ctx) {
+        ctx.save();
+        ctx.translate(light.x, light.y);
+        ctx.rotate(light.angle);
+        
+        // Create cone gradient
+        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, light.radius);
+        const color = light.getColor();
+        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity})`);
+        gradient.addColorStop(0.5, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity * 0.5})`);
+        gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+        
+        // Draw cone shape
+        ctx.beginPath();
+        ctx.arc(0, 0, light.radius, -light.coneAngle / 2, light.coneAngle / 2);
+        ctx.lineTo(0, 0);
+        ctx.closePath();
+        
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        ctx.restore();
+    }
+
+    /**
+     * Render area light (rectangular light source)
+     * @private
+     */
+    _renderAreaLight(light, ctx) {
+        const gradient = ctx.createLinearGradient(
+            light.x - light.width / 2, light.y,
+            light.x + light.width / 2, light.y
+        );
+        
+        const color = light.getColor();
+        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+        gradient.addColorStop(0.1, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity * 0.5})`);
+        gradient.addColorStop(0.5, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity})`);
+        gradient.addColorStop(0.9, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity * 0.5})`);
+        gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(
+            light.x - light.width / 2,
+            light.y - light.height / 2,
+            light.width,
+            light.height
+        );
+    }
+
+    /**
+     * Render directional light (like sunlight)
+     * @private
+     */
+    _renderDirectionalLight(light, ctx) {
+        const width = this.lightingCanvas.width;
+        const height = this.lightingCanvas.height;
+        
+        // Create gradient based on direction
+        const dx = Math.cos(light.angle) * Math.max(width, height);
+        const dy = Math.sin(light.angle) * Math.max(width, height);
+        
+        const gradient = ctx.createLinearGradient(
+            width/2 - dx/2, height/2 - dy/2,
+            width/2 + dx/2, height/2 + dy/2
+        );
+        
+        const color = light.getColor();
+        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, ${light.intensity})`);
+        gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+    }
+
+    /**
+     * Render particle light
+     * @private
+     */
+    _renderParticleLight(light, ctx) {
+        const gradient = ctx.createRadialGradient(
+            light.x, light.y, 0,
+            light.x, light.y, light.radius
+        );
+        
+        gradient.addColorStop(0, `rgba(${Math.floor(light.color.r * 255)}, ${Math.floor(light.color.g * 255)}, ${Math.floor(light.color.b * 255)}, ${light.intensity})`);
+        gradient.addColorStop(0.5, `rgba(${Math.floor(light.color.r * 255)}, ${Math.floor(light.color.g * 255)}, ${Math.floor(light.color.b * 255)}, ${light.intensity * 0.5})`);
+        gradient.addColorStop(1, `rgba(${Math.floor(light.color.r * 255)}, ${Math.floor(light.color.g * 255)}, ${Math.floor(light.color.b * 255)}, 0)`);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(
+            light.x - light.radius,
+            light.y - light.radius,
+            light.radius * 2,
+            light.radius * 2
+        );
+    }
+
+    /**
+     * Render shadows from shadow casters
+     * @private
+     */
+    _renderShadows() {
+        const ctx = this.shadowCtx;
+        ctx.clearRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height);
+        
+        // Fill with light (white) initially, shadows will darken areas
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height);
+        
+        // For each light that casts shadows
+        this.lights.forEach(light => {
+            if (!light.castShadows) return;
+            
+            // Use multiply blend mode so shadows darken the light areas
+            ctx.globalCompositeOperation = 'multiply';
+            
+            this.shadowCasters.forEach(caster => {
+                this._castShadow(light, caster, ctx);
+            });
+        });
+        
+        // Reset blend mode
+        ctx.globalCompositeOperation = 'source-over';
+        
+        // Apply shadows to lighting buffer with better blending
+        const prevOperation = this.lightingCtx.globalCompositeOperation;
+        this.lightingCtx.globalCompositeOperation = 'multiply';
+        this.lightingCtx.globalAlpha = 0.8; // Make shadows less harsh
+        this.lightingCtx.drawImage(this.shadowCanvas, 0, 0);
+        this.lightingCtx.globalAlpha = 1.0;
+        this.lightingCtx.globalCompositeOperation = prevOperation;
+    }
+
+    /**
+     * Cast shadow from a light source
+     * @private
+     */
+    _castShadow(light, caster, ctx) {
+        ctx.save();
+        
+        // Calculate distance from light to caster center
+        const casterCenterX = caster.x + (caster.width || 0) / 2;
+        const casterCenterY = caster.y + (caster.height || 0) / 2;
+        const dx = casterCenterX - light.x;
+        const dy = casterCenterY - light.y;
+        const distanceToLight = Math.sqrt(dx * dx + dy * dy);
+        
+        // Don't cast shadow if light is inside or too close to the object
+        if (distanceToLight < (caster.radius || Math.max(caster.width || 0, caster.height || 0) / 2) + 10) {
+            ctx.restore();
+            return;
+        }
+        
+        // Shadow opacity decreases with distance
+        const shadowOpacity = Math.min(caster.opacity, caster.opacity * (light.radius / distanceToLight));
+        ctx.fillStyle = `rgba(0, 0, 0, ${shadowOpacity * 0.6})`; // Reduce overall shadow intensity
+        
+        if (caster.type === 'rectangle') {
+            this._castRectangleShadow(light, caster, ctx);
+        } else if (caster.type === 'circle') {
+            this._castCircleShadow(light, caster, ctx);
+        }
+        
+        ctx.restore();
+    }
+
+    _castRectangleShadow(light, caster, ctx) {
+        const corners = [
+            { x: caster.x, y: caster.y },
+            { x: caster.x + caster.width, y: caster.y },
+            { x: caster.x + caster.width, y: caster.y + caster.height },
+            { x: caster.x, y: caster.y + caster.height }
+        ];
+        
+        // Find the corners that face away from the light (silhouette edges)
+        const silhouetteVertices = [];
+        
+        for (let i = 0; i < corners.length; i++) {
+            const current = corners[i];
+            const next = corners[(i + 1) % corners.length];
+            
+            // Calculate if this edge faces away from light
+            const edgeDx = next.x - current.x;
+            const edgeDy = next.y - current.y;
+            const toLightDx = light.x - current.x;
+            const toLightDy = light.y - current.y;
+            
+            // Cross product to determine if edge faces away from light
+            const cross = edgeDx * toLightDy - edgeDy * toLightDx;
+            
+            if (cross < 0) { // This edge faces away from light
+                silhouetteVertices.push(current, next);
+            }
+        }
+        
+        if (silhouetteVertices.length === 0) return;
+        
+        // Cast shadow from silhouette vertices
+        const shadowLength = light.radius * 1.5;
+        
+        ctx.beginPath();
+        
+        // Draw the object itself
+        ctx.moveTo(corners[0].x, corners[0].y);
+        for (let i = 1; i < corners.length; i++) {
+            ctx.lineTo(corners[i].x, corners[i].y);
+        }
+        ctx.closePath();
+        
+        // Extend shadow from silhouette edges
+        silhouetteVertices.forEach(vertex => {
+            const dx = vertex.x - light.x;
+            const dy = vertex.y - light.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > 0) {
+                const shadowX = vertex.x + (dx / distance) * shadowLength;
+                const shadowY = vertex.y + (dy / distance) * shadowLength;
+                ctx.lineTo(shadowX, shadowY);
+            }
+        });
+        
+        ctx.fill();
+    }
+
+    _castCircleShadow(light, caster, ctx) {
+        const dx = caster.x - light.x;
+        const dy = caster.y - light.y;
+        const distanceToCenter = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distanceToCenter <= caster.radius) return; // Light is inside circle
+        
+        // Calculate tangent points for clean shadow edges
+        const angle = Math.atan2(dy, dx);
+        const tangentAngle = Math.asin(caster.radius / distanceToCenter);
+        
+        const tangent1Angle = angle + tangentAngle;
+        const tangent2Angle = angle - tangentAngle;
+        
+        const tangent1X = caster.x + Math.cos(tangent1Angle + Math.PI/2) * caster.radius;
+        const tangent1Y = caster.y + Math.sin(tangent1Angle + Math.PI/2) * caster.radius;
+        const tangent2X = caster.x + Math.cos(tangent2Angle - Math.PI/2) * caster.radius;
+        const tangent2Y = caster.y + Math.sin(tangent2Angle - Math.PI/2) * caster.radius;
+        
+        // Project shadow
+        const shadowLength = light.radius * 1.5;
+        
+        const shadow1X = tangent1X + (tangent1X - light.x) / distanceToCenter * shadowLength;
+        const shadow1Y = tangent1Y + (tangent1Y - light.y) / distanceToCenter * shadowLength;
+        const shadow2X = tangent2X + (tangent2X - light.x) / distanceToCenter * shadowLength;
+        const shadow2Y = tangent2Y + (tangent2Y - light.y) / distanceToCenter * shadowLength;
+        
+        // Draw shadow shape
+        ctx.beginPath();
+        ctx.arc(caster.x, caster.y, caster.radius, tangent2Angle - Math.PI/2, tangent1Angle + Math.PI/2);
+        ctx.lineTo(shadow1X, shadow1Y);
+        ctx.lineTo(shadow2X, shadow2Y);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    /**
+     * Apply lighting to the main canvas
+     * @param {CanvasRenderingContext2D} mainCtx - Main canvas context
+     */
+    applyLighting(mainCtx) {
+        if (!this.enabled) return;
+        
+        mainCtx.save();
+        mainCtx.globalCompositeOperation = 'multiply';
+        mainCtx.drawImage(this.lightingCanvas, 0, 0);
+        mainCtx.restore();
+    }
+
+    /**
+     * Toggle lighting system
+     */
+    toggle() {
+        this.enabled = !this.enabled;
+    }
+
+    /**
+     * Set lighting quality
+     * @param {string} quality - Quality level ('low', 'medium', 'high', 'ultra')
+     */
+    setQuality(quality) {
+        this.quality = quality;
+        
+        switch (quality) {
+            case 'low':
+                this.maxLights = 10;
+                this.shadowsEnabled = false;
+                this.softShadows = false;
+                this.coloredLights = false;
+                break;
+            case 'medium':
+                this.maxLights = 25;
+                this.shadowsEnabled = true;
+                this.softShadows = false;
+                this.coloredLights = true;
+                break;
+            case 'high':
+                this.maxLights = 50;
+                this.shadowsEnabled = true;
+                this.softShadows = true;
+                this.coloredLights = true;
+                break;
+            case 'ultra':
+                this.maxLights = 100;
+                this.shadowsEnabled = true;
+                this.softShadows = true;
+                this.coloredLights = true;
+                break;
+        }
+    }
+
+    /**
+     * Clear all lights
+     */
+    clear() {
+        this.lights.length = 0;
+        this.particleLights.length = 0;
+        this.shadowCasters.length = 0;
+    }
+}
+
+/**
+ * Individual light source
+ */
+class Light {
+    constructor(system, config = {}) {
+        this.system = system;
+        
+        // Light properties
+        this.type = config.type || 'point'; // 'point', 'spot', 'area', 'directional'
+        this.x = config.x || 0;
+        this.y = config.y || 0;
+        this.radius = config.radius || 100;
+        this.intensity = config.intensity || 1.0;
+        this.color = config.color || { r: 255, g: 255, b: 255 };
+        this.enabled = config.enabled !== false;
+        this.castShadows = config.castShadows !== false;
+        
+        // Spot light specific
+        this.angle = config.angle || 0;
+        this.coneAngle = config.coneAngle || Math.PI / 4;
+        
+        // Area light specific
+        this.width = config.width || 100;
+        this.height = config.height || 100;
+        
+        // Animation properties
+        this.flicker = config.flicker || false;
+        this.flickerSpeed = config.flickerSpeed || 10;
+        this.flickerIntensity = config.flickerIntensity || 0.1;
+        this.pulse = config.pulse || false;
+        this.pulseSpeed = config.pulseSpeed || 1;
+        this.pulseMin = config.pulseMin || 0.5;
+        this.pulseMax = config.pulseMax || 1.0;
+        
+        // Internal animation state
+        this._flickerTimer = 0;
+        this._pulseTimer = 0;
+        this._currentIntensity = this.intensity;
+    }
+
+    /**
+     * Update light animations
+     * @param {number} deltaTime - Time since last frame
+     */
+    update(deltaTime) {
+        if (!this.enabled) return;
+        
+        // Update flicker effect
+        if (this.flicker) {
+            this._flickerTimer += deltaTime * this.flickerSpeed;
+            const flickerOffset = (Math.random() - 0.5) * this.flickerIntensity;
+            this._currentIntensity = Math.max(0, Math.min(1, this.intensity + flickerOffset));
+        }
+        
+        // Update pulse effect
+        if (this.pulse) {
+            this._pulseTimer += deltaTime * this.pulseSpeed;
+            const pulseFactor = (Math.sin(this._pulseTimer) + 1) / 2;
+            this._currentIntensity = this.pulseMin + (this.pulseMax - this.pulseMin) * pulseFactor;
+        }
+        
+        // If no effects, use base intensity
+        if (!this.flicker && !this.pulse) {
+            this._currentIntensity = this.intensity;
+        }
+    }
+
+    /**
+     * Set light position
+     * @param {number} x - X position
+     * @param {number} y - Y position
+     */
+    setPosition(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Set light color
+     * @param {number} r - Red (0-255)
+     * @param {number} g - Green (0-255)
+     * @param {number} b - Blue (0-255)
+     */
+    setColor(r, g, b) {
+        this.color = { r, g, b };
+    }
+
+    /**
+     * Get interpolated color for rendering
+     * @returns {Object} Color object with r, g, b values
+     */
+    getColor() {
+        return {
+            r: Math.floor(this.color.r),
+            g: Math.floor(this.color.g),
+            b: Math.floor(this.color.b)
+        };
+    }
+
+    /**
+     * Toggle light on/off
+     */
+    toggle() {
+        this.enabled = !this.enabled;
+    }
+
+    /**
+     * Enable flicker effect
+     * @param {number} [speed=10] - Flicker speed
+     * @param {number} [intensity=0.1] - Flicker intensity
+     */
+    enableFlicker(speed = 10, intensity = 0.1) {
+        this.flicker = true;
+        this.flickerSpeed = speed;
+        this.flickerIntensity = intensity;
+    }
+
+    /**
+     * Enable pulse effect
+     * @param {number} [speed=1] - Pulse speed
+     * @param {number} [min=0.5] - Minimum intensity
+     * @param {number} [max=1.0] - Maximum intensity
+     */
+    enablePulse(speed = 1, min = 0.5, max = 1.0) {
+        this.pulse = true;
+        this.pulseSpeed = speed;
+        this.pulseMin = min;
+        this.pulseMax = max;
+    }
+
+    /**
+     * Disable all effects
+     */
+    disableEffects() {
+        this.flicker = false;
+        this.pulse = false;
+        this._currentIntensity = this.intensity;
     }
 }
 
@@ -5112,6 +9219,46 @@ class InputManager {
         this.onKeyUp = null;
         
         this._setupEventListeners();
+        
+        // Add automatic coordinate conversion helper to canvas after setup
+        this._addCanvasCoordinateHelper();
+    }
+
+    /**
+     * Add helper method to canvas for automatic coordinate conversion
+     * This provides a clean, default way to add event listeners with canvas coordinates
+     * @private
+     */
+    _addCanvasCoordinateHelper() {
+        const canvas = this.game.canvas;
+        const inputManager = this;
+        
+        // Add helper method to canvas for easy coordinate conversion
+        canvas.addCanvasEventListener = function(eventType, handler, options) {
+            const mouseEvents = ['click', 'mousedown', 'mouseup', 'mousemove', 'dblclick'];
+            const touchEvents = ['touchstart', 'touchmove', 'touchend'];
+            
+            if (mouseEvents.includes(eventType) || touchEvents.includes(eventType)) {
+                // Wrapper that automatically provides canvas coordinates
+                const wrappedHandler = (originalEvent) => {
+                    const canvasCoords = inputManager.screenToCanvas(
+                        originalEvent.clientX || (originalEvent.touches?.[0]?.clientX),
+                        originalEvent.clientY || (originalEvent.touches?.[0]?.clientY)
+                    );
+                    
+                    // Add canvas coordinates to the event object
+                    const enhancedEvent = Object.create(originalEvent);
+                    enhancedEvent.canvasX = canvasCoords.x;
+                    enhancedEvent.canvasY = canvasCoords.y;
+                    
+                    handler.call(this, enhancedEvent);
+                };
+                
+                this.addEventListener(eventType, wrappedHandler, options);
+            } else {
+                this.addEventListener(eventType, handler, options);
+            }
+        };
     }
 
     /**
@@ -5400,6 +9547,50 @@ class InputManager {
     }
 
     /**
+     * Check if mouse button is down
+     * @param {number} button - Button index (0=left, 1=middle, 2=right)
+     * @returns {boolean} True if button is down
+     */
+    isMouseButtonDown(button = 0) {
+        return this.mouse.isDown && this.mouse.button === button;
+    }
+
+    /**
+     * Check if mouse button was just pressed
+     * @param {number} button - Button index (0=left, 1=middle, 2=right)
+     * @returns {boolean} True if button was just pressed
+     */
+    isMouseButtonJustPressed(button = 0) {
+        return this.mouse.justPressed && this.mouse.button === button;
+    }
+
+    /**
+     * Check if mouse button was just released
+     * @param {number} button - Button index (0=left, 1=middle, 2=right)
+     * @returns {boolean} True if button was just released
+     */
+    isMouseButtonJustReleased(button = 0) {
+        return this.mouse.justReleased && this.mouse.button === button;
+    }
+
+    /**
+     * Get current mouse state
+     * @returns {Object} Mouse state object
+     */
+    getMouseState() {
+        return {
+            x: this.mouse.canvasX,
+            y: this.mouse.canvasY,
+            worldX: this.mouse.x,
+            worldY: this.mouse.y,
+            isDown: this.mouse.isDown,
+            button: this.mouse.button,
+            justPressed: this.mouse.justPressed,
+            justReleased: this.mouse.justReleased
+        };
+    }
+
+    /**
      * Check if pointer is currently down
      * @returns {boolean} True if pointer is down
      */
@@ -5430,222 +9621,90 @@ class InputManager {
     getTouches() {
         return [...this.touches];
     }
+
+    /**
+     * Register a click event handler with automatic coordinate translation
+     * Automatically converts screen coordinates to canvas coordinates
+     * @param {Function} handler - Click handler function(canvasX, canvasY, button)
+     * @example
+     * game.input.on('click', (x, y) => {
+     *   player.targetX = x;
+     *   player.targetY = y;
+     * });
+     */
+    on(eventType, handler) {
+        switch (eventType) {
+            case 'click':
+                this.onPointerUp = (canvasX, canvasY) => {
+                    if (this.mouse.justReleased) {
+                        handler(canvasX, canvasY, this.mouse.button);
+                    }
+                };
+                break;
+            case 'mousedown':
+            case 'pointerdown':
+                this.onPointerDown = handler;
+                break;
+            case 'mousemove':
+            case 'pointermove':
+                this.onPointerMove = handler;
+                break;
+            case 'mouseup':
+            case 'pointerup':
+                this.onPointerUp = handler;
+                break;
+            case 'touchstart':
+                this.onPointerDown = handler;
+                break;
+            case 'touchmove':
+                this.onPointerMove = handler;
+                break;
+            case 'touchend':
+                this.onPointerUp = handler;
+                break;
+            case 'keydown':
+                this.onKeyDown = handler;
+                break;
+            case 'keyup':
+                this.onKeyUp = handler;
+                break;
+            default:
+                console.warn(`Unknown input event type: ${eventType}`);
+        }
+    }
+
+    /**
+     * Get the accurate canvas position from any mouse/touch event
+     * This is the same logic used internally for coordinate translation
+     * @param {Event} event - Mouse or touch event
+     * @returns {{x: number, y: number}} Canvas coordinates
+     * @example
+     * canvas.addEventListener('click', (e) => {
+     *   const pos = game.input.getCanvasPosition(e);
+     *   console.log(`Clicked at canvas position: ${pos.x}, ${pos.y}`);
+     * });
+     */
+    getCanvasPosition(event) {
+        let clientX, clientY;
+        
+        if (event.touches && event.touches.length > 0) {
+            // Touch event
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else if (event.changedTouches && event.changedTouches.length > 0) {
+            // Touch end event
+            clientX = event.changedTouches[0].clientX;
+            clientY = event.changedTouches[0].clientY;
+        } else {
+            // Mouse event
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
+        
+        return this.screenToCanvas(clientX, clientY);
+    }
 }
 
-/**
- * Game object base class with common properties and behaviors
- * All game entities should extend this class
- */
-class GameObject {
-    constructor(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
-        this.width = 0;
-        this.height = 0;
-        this.rotation = 0;
-        this.scaleX = 1;
-        this.scaleY = 1;
-        this.alpha = 1;
-        this.visible = true;
-        this.active = true;
-        this.timeScale = 1;
-        
-        // Physics
-        this.vx = 0;
-        this.vy = 0;
-        this.acceleration = { x: 0, y: 0 };
-        this.friction = 0;
-        this.bounce = 0;
-        
-        // Collision
-        this.collisionEnabled = false;
-        this.collisionBounds = null;
-        
-        // Lifecycle
-        this.created = false;
-        this.destroyed = false;
-        
-        // Component system
-        this.components = new Map();
-    }
-
-    /**
-     * Initialize the game object
-     */
-    create() {
-        this.created = true;
-    }
-
-    /**
-     * Update the game object
-     * @param {number} deltaTime - Time since last frame
-     */
-    update(deltaTime) {
-        if (!this.active) return;
-        
-        // Apply time scale
-        const scaledDelta = deltaTime * this.timeScale;
-        
-        // Update physics
-        this.vx += this.acceleration.x * scaledDelta;
-        this.vy += this.acceleration.y * scaledDelta;
-        
-        // Apply friction
-        if (this.friction > 0) {
-            this.vx *= Math.pow(1 - this.friction, scaledDelta);
-            this.vy *= Math.pow(1 - this.friction, scaledDelta);
-        }
-        
-        // Update position
-        this.x += this.vx * scaledDelta;
-        this.y += this.vy * scaledDelta;
-        
-        // Update components
-        this.components.forEach(component => {
-            if (component.update) {
-                component.update(scaledDelta);
-            }
-        });
-    }
-
-    /**
-     * Render the game object
-     * @param {Renderer} renderer - Renderer instance
-     */
-    render(renderer) {
-        if (!this.visible) return;
-        
-        // Render components
-        this.components.forEach(component => {
-            if (component.render) {
-                component.render(renderer);
-            }
-        });
-    }
-
-    /**
-     * Destroy the game object
-     */
-    destroy() {
-        this.destroyed = true;
-        this.active = false;
-        this.visible = false;
-        
-        // Destroy components
-        this.components.forEach(component => {
-            if (component.destroy) {
-                component.destroy();
-            }
-        });
-        
-        this.components.clear();
-    }
-
-    /**
-     * Add a component to this game object
-     * @param {string} name - Component name
-     * @param {Object} component - Component instance
-     */
-    addComponent(name, component) {
-        component.gameObject = this;
-        this.components.set(name, component);
-        
-        if (component.create) {
-            component.create();
-        }
-    }
-
-    /**
-     * Get a component by name
-     * @param {string} name - Component name
-     * @returns {Object|null} Component or null
-     */
-    getComponent(name) {
-        return this.components.get(name) || null;
-    }
-
-    /**
-     * Remove a component
-     * @param {string} name - Component name
-     */
-    removeComponent(name) {
-        const component = this.components.get(name);
-        if (component && component.destroy) {
-            component.destroy();
-        }
-        this.components.delete(name);
-    }
-
-    /**
-     * Get bounding box for collision detection
-     * @returns {Object} Bounding box {x, y, width, height}
-     */
-    getBounds() {
-        return {
-            x: this.x - this.width / 2,
-            y: this.y - this.height / 2,
-            width: this.width,
-            height: this.height
-        };
-    }
-
-    /**
-     * Check collision with another game object
-     * @param {GameObject} other - Other game object
-     * @returns {boolean} True if colliding
-     */
-    collidesWith(other) {
-        if (!this.collisionEnabled || !other.collisionEnabled) return false;
-        
-        const bounds1 = this.getBounds();
-        const bounds2 = other.getBounds();
-        
-        return bounds1.x < bounds2.x + bounds2.width &&
-               bounds1.x + bounds1.width > bounds2.x &&
-               bounds1.y < bounds2.y + bounds2.height &&
-               bounds1.y + bounds1.height > bounds2.y;
-    }
-
-    /**
-     * Set position
-     * @param {number} x - X position
-     * @param {number} y - Y position
-     */
-    setPosition(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * Move by offset
-     * @param {number} dx - X offset
-     * @param {number} dy - Y offset
-     */
-    move(dx, dy) {
-        this.x += dx;
-        this.y += dy;
-    }
-
-    /**
-     * Set scale
-     * @param {number} scaleX - X scale
-     * @param {number} scaleY - Y scale (optional, defaults to scaleX)
-     */
-    setScale(scaleX, scaleY = scaleX) {
-        this.scaleX = scaleX;
-        this.scaleY = scaleY;
-    }
-
-    /**
-     * Set velocity
-     * @param {number} vx - X velocity
-     * @param {number} vy - Y velocity
-     */
-    setVelocity(vx, vy) {
-        this.vx = vx;
-        this.vy = vy;
-    }
-}
 
 /**
  * Tile map system for efficient rendering of large worlds
@@ -6694,6 +10753,14 @@ if (typeof module !== 'undefined' && module.exports) {
         Renderer,
         AssetManager,
         SoundManager,
+        StorageManager,
+        WalletManager,
+        SceneManager,
+        GameObject,
+        SpriteComponent,
+        AnimationComponent,
+        TextComponent,
+        CircleColliderComponent,
         RenderCache,
         Spritesheet,
         AnimationPlayer,
@@ -6703,9 +10770,10 @@ if (typeof module !== 'undefined' && module.exports) {
         TweenManager,
         Tween,
         EffectsManager,
+        LightingSystem,
+        Light,
         TimeManager,
         InputManager,
-        GameObject,
         TileMap,
         UIManager,
         UIElement,
